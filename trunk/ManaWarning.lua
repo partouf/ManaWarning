@@ -335,8 +335,9 @@ function ManaWarning_OnEvent( obj, event, ... )
       bReady = true;
    elseif ( event == CONST_POWERUPDATE ) then
 		local unitId, resource = ...;
-		if (resource == "MANA") or (resource == "FOCUS") then
-			if ( bManaWarningActive or bManaOomStatusAnnounce ) then
+		if ( bManaWarningActive or bManaOomStatusAnnounce ) then
+			if (resource == "MANA") then
+				--  or (resource == "FOCUS") ??
 				-- apparently you get updates for everyone in your party/raid, so check if we get a "player" update
 				if ( unitId == CONST_PLAYER ) then
 					ManaWarning_PlayerManaUpdate();
@@ -474,8 +475,8 @@ function ManaWarning_TimeManaOnCooldown()
 
    if ( enClass == "HUNTER" ) then
 		-- used to be stuff with Aspect of the Viper :(
-		sPotionHint = "Steady Shot";
-		return 0;
+		--sPotionHint = "Steady Shot";
+		--return 0;
    end
 
    return iLowestRemainingTime;
@@ -601,6 +602,7 @@ function ManaWarning_PlayerHealthUpdate()
 
          iLowestRemainingTime = 0;
          if ( bHealthDoPotsCheck ) then
+			sPotionHint = "";
             iLowestRemainingTime = ManaWarning_TimeHealthOnCooldown();
          end
 

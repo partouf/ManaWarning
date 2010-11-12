@@ -1,0 +1,9 @@
+﻿## Interface: 40000
+## Title: ManaWarning
+## SavedVariablesPerCharacter: ManaWarning_Settings
+## RequiredDeps: DBM-Core
+## Author: Kwast of Draenor
+## Version: 1.2
+## X-eMail: partouf@gmail.com
+ManaWarning.xml
+ManaWarning.lua

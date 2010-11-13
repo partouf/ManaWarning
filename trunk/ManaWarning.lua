@@ -501,6 +501,8 @@ function ManaWarning_TimeHealthOnCooldown()
 end
 
 function ManaWarning_MessagePartyRaid( sMsg )
+   RaidNotice_AddMessage(RaidBossEmoteFrame, sMsg, ChatTypeInfo["RAID_WARNING"]);
+
    if ( UnitInRaid( CONST_PLAYER ) ) then
       SendChatMessage( sMsg, "RAID", nil, "" );
    elseif ( GetPartyMember(1) == 1 ) then
@@ -513,6 +515,8 @@ function ManaWarning_MessagePartyRaid( sMsg )
 end
 
 function ManaWarning_MessageSelf( sMsg )
+  RaidNotice_AddMessage(RaidBossEmoteFrame, sMsg, ChatTypeInfo["RAID_WARNING"]);
+
   if DEFAULT_CHAT_FRAME then
      DEFAULT_CHAT_FRAME:AddMessage( sMsg, 1.0, 0.0, 0.0);
   end

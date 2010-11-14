@@ -25,6 +25,33 @@ bHealthDoCombatCheck = true;
 
 sPotionHint = "";
 
+-- timer stuff
+ManaWarning_Timers = {};
+function ManaWarning_Schedule( t, f )
+	local now = GetTime();
+	local task = { now + t, f };
+	table.insert( ManaWarning_Timers, task );
+end
+
+function ManaWarning_CheckTasks()
+	local c = #(ManaWarning_Timers);
+	local i = 1;
+	while i <= c do
+		local task = ManaWarning_Timers[i];
+		if GetTime() > task[1] then
+			table.remove( ManaWarning_Timers, i );
+			c = c - 1;
+			i = i - 1;
+
+			local f = task[2];
+			f();
+		end
+		i = i + 1;
+	end
+end
+
+-- 
+
 
 function chkWarningMana_OnClick()
 	if ( chkWarningMana:GetChecked() ) then
@@ -329,6 +356,8 @@ end
 
 -- OnEvent
 function ManaWarning_OnEvent( obj, event, ... )
+   ManaWarning_CheckTasks();
+	
    if ( event == CONST_VARSLOADED ) then
       ManaWarningSettings_LoadFromSavedVariables();
 
@@ -554,7 +583,7 @@ function ManaWarning_PlayerManaUpdate()
 				ManaWarning_MessagePartyRaid( "OOM!" );
 			 end
 
-			 DBM:Schedule( iOomWarningTmr, ManaWarning_ResetManaOOMWarningGiven );
+			 ManaWarning_Schedule( iOomWarningTmr, ManaWarning_ResetManaOOMWarningGiven );
 		  end
 	   end
 
@@ -567,7 +596,7 @@ function ManaWarning_PlayerManaUpdate()
 				iLowestRemainingTime = iManaWarningTmr;
 			 end
 
-			 DBM:Schedule( iLowestRemainingTime, ManaWarning_ResetManaWarningGiven );
+			 ManaWarning_Schedule( iLowestRemainingTime, ManaWarning_ResetManaWarningGiven );
 
              if ( bManaDoPotsCheck ) then
                 if not ( sPotionHint == "" ) then
@@ -614,7 +643,7 @@ function ManaWarning_PlayerHealthUpdate()
             iLowestRemainingTime = iHealthWarningTmr;
          end
 
-         DBM:Schedule( iLowestRemainingTime, ManaWarning_ResetHealthWarningGiven );
+         ManaWarning_Schedule( iLowestRemainingTime, ManaWarning_ResetHealthWarningGiven );
          
          if ( bHealthDoPotsCheck ) then
             if not ( sPotionHint == "" ) then
@@ -630,17 +659,14 @@ end
 
 -- Resets a boolean, so the ManaWarning will again show on the screen if we're still without mana
 function ManaWarning_ResetManaWarningGiven()
-   DBM:Unschedule( ManaWarning_ResetManaWarningGiven );
    bManaWarningGiven = false;
 end
 
 function ManaWarning_ResetHealthWarningGiven()
-   DBM:Unschedule( ManaWarning_ResetHealthWarningGiven );
    bHealthWarningGiven = false;
 end
 
 -- Resets a boolean, so the OOM-message will again show
 function ManaWarning_ResetManaOOMWarningGiven()
-   DBM:Unschedule( ManaWarning_ResetManaOOMWarningGiven );
    bManaOOMWarningGiven = false;
 end

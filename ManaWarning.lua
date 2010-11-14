@@ -554,7 +554,7 @@ function ManaWarning_PlayerManaUpdate()
 				ManaWarning_MessagePartyRaid( "OOM!" );
 			 end
 
-			 DBM.Schedule( iOomWarningTmr, ManaWarning_ResetManaOOMWarningGiven );
+			 DBM:Schedule( iOomWarningTmr, ManaWarning_ResetManaOOMWarningGiven );
 		  end
 	   end
 
@@ -567,7 +567,7 @@ function ManaWarning_PlayerManaUpdate()
 				iLowestRemainingTime = iManaWarningTmr;
 			 end
 
-			 DBM.Schedule( iLowestRemainingTime, ManaWarning_ResetManaWarningGiven );
+			 DBM:Schedule( iLowestRemainingTime, ManaWarning_ResetManaWarningGiven );
 
              if ( bManaDoPotsCheck ) then
                 if not ( sPotionHint == "" ) then
@@ -614,7 +614,7 @@ function ManaWarning_PlayerHealthUpdate()
             iLowestRemainingTime = iHealthWarningTmr;
          end
 
-         DBM.Schedule( iLowestRemainingTime, ManaWarning_ResetHealthWarningGiven );
+         DBM:Schedule( iLowestRemainingTime, ManaWarning_ResetHealthWarningGiven );
          
          if ( bHealthDoPotsCheck ) then
             if not ( sPotionHint == "" ) then
@@ -630,17 +630,17 @@ end
 
 -- Resets a boolean, so the ManaWarning will again show on the screen if we're still without mana
 function ManaWarning_ResetManaWarningGiven()
-   DBM.UnSchedule( ManaWarning_ResetManaWarningGiven );
+   DBM:Unschedule( ManaWarning_ResetManaWarningGiven );
    bManaWarningGiven = false;
 end
 
 function ManaWarning_ResetHealthWarningGiven()
-   DBM.UnSchedule( ManaWarning_ResetHealthWarningGiven );
+   DBM:Unschedule( ManaWarning_ResetHealthWarningGiven );
    bHealthWarningGiven = false;
 end
 
 -- Resets a boolean, so the OOM-message will again show
 function ManaWarning_ResetManaOOMWarningGiven()
-   DBM.UnSchedule( ManaWarning_ResetManaOOMWarningGiven );
+   DBM:Unschedule( ManaWarning_ResetManaOOMWarningGiven );
    bManaOOMWarningGiven = false;
 end

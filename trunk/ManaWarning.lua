@@ -23,14 +23,50 @@ iHealthTreshhold = 50.0;
 bHealthDoPotsCheck = true;
 bHealthDoCombatCheck = true;
 
+sOomMsg = "OOM!";
+
 sPotionHint = "";
+
+--
+-- IconHelpers
+icons1 = {
+	star = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t",
+	circle = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t",
+	diamond = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_3:0|t",
+	triangle = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_4:0|t",
+	moon = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_5:0|t",
+	square = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_6:0|t",
+	cross = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_7:0|t",
+	skull = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_8:0|t",
+}
+icons2 = {
+	rt1 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t",
+	rt2 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t",
+	rt3 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_3:0|t",
+	rt4 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_4:0|t",
+	rt5 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_5:0|t",
+	rt6 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_6:0|t",
+	rt7 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_7:0|t",
+	rt8 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_8:0|t",
+}
+
+function ManaWarning_ResolveIcons( s1 )
+	local s2 = s1;
+	for sIconName,sImageLink in pairs(icons1) do
+		s2 = string.gsub( s2, "{"..sIconName.."}", sImageLink );
+	end
+	for sIconName,sImageLink in pairs(icons2) do
+		s2 = string.gsub( s2, "{"..sIconName.."}", sImageLink );
+	end
+	return s2;
+end
 
 -- timer stuff
 ManaWarning_Timers = {};
 function ManaWarning_Schedule( t, f )
 	local now = GetTime();
 	local task = { now + t, f };
-	table.insert( ManaWarning_Timers, task );
+	tinsert( ManaWarning_Timers, task );
 end
 
 function ManaWarning_CheckTasks()
@@ -39,7 +75,7 @@ function ManaWarning_CheckTasks()
 	while i <= c do
 		local task = ManaWarning_Timers[i];
 		if GetTime() > task[1] then
-			table.remove( ManaWarning_Timers, i );
+			tremove( ManaWarning_Timers, i );
 			c = c - 1;
 			i = i - 1;
 
@@ -530,7 +566,8 @@ function ManaWarning_TimeHealthOnCooldown()
 end
 
 function ManaWarning_MessagePartyRaid( sMsg )
-   RaidNotice_AddMessage(RaidBossEmoteFrame, sMsg, ChatTypeInfo["RAID_WARNING"]);
+   local sMsg2 = ManaWarning_ResolveIcons( sMsg );
+   RaidNotice_AddMessage(RaidBossEmoteFrame, sMsg2, ChatTypeInfo["RAID_WARNING"]);
 
    if ( UnitInRaid( CONST_PLAYER ) ) then
       SendChatMessage( sMsg, "RAID", nil, "" );
@@ -538,16 +575,17 @@ function ManaWarning_MessagePartyRaid( sMsg )
       SendChatMessage( sMsg, "PARTY", nil, "" );
    else
       if DEFAULT_CHAT_FRAME then
-         DEFAULT_CHAT_FRAME:AddMessage( sMsg, 1.0, 0.0, 0.0);
+         DEFAULT_CHAT_FRAME:AddMessage( sMsg2, 1.0, 0.0, 0.0);
       end
    end
 end
 
 function ManaWarning_MessageSelf( sMsg )
-  RaidNotice_AddMessage(RaidBossEmoteFrame, sMsg, ChatTypeInfo["RAID_WARNING"]);
+   local sMsg2 = ManaWarning_ResolveIcons( sMsg );
+  RaidNotice_AddMessage(RaidBossEmoteFrame, sMsg2, ChatTypeInfo["RAID_WARNING"]);
 
   if DEFAULT_CHAT_FRAME then
-     DEFAULT_CHAT_FRAME:AddMessage( sMsg, 1.0, 0.0, 0.0);
+     DEFAULT_CHAT_FRAME:AddMessage( sMsg2, 1.0, 0.0, 0.0);
   end
 end
 
@@ -578,9 +616,9 @@ function ManaWarning_PlayerManaUpdate()
 			 bManaOOMWarningGiven = true;
 
 			 if ( bManaDoPotsCheck ) then
-				ManaWarning_MessagePartyRaid( "OOM! (CD's "..iLowestRemainingTime.."s)" );
+				ManaWarning_MessagePartyRaid( sOomMsg.." (CD's "..iLowestRemainingTime.."s)" );
 			 else
-				ManaWarning_MessagePartyRaid( "OOM!" );
+				ManaWarning_MessagePartyRaid( sOomMsg );
 			 end
 
 			 ManaWarning_Schedule( iOomWarningTmr, ManaWarning_ResetManaOOMWarningGiven );

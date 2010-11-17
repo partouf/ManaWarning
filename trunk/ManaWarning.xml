@@ -108,7 +108,15 @@
 					</Anchor>
 				</Anchors>
 			</EditBox>
-			<EditBox name="edOomInt" inherits="InputBoxTemplate" numeric="true">
+      <EditBox name="edOomText" inherits="InputBoxTemplate">
+        <Size x="138" y="20" />
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset x="260" y="-310" />
+          </Anchor>
+        </Anchors>
+      </EditBox>
+      <EditBox name="edOomInt" inherits="InputBoxTemplate" numeric="true">
 				<Size x="47" y="20" />
 				<Anchors>
 					<Anchor point="TOPLEFT">

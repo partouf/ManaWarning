@@ -145,6 +145,7 @@ function chkWarningOom_OnClick()
 		lblOomInt:Show();
 		edOomInt:Show();
 		lblOomIntSeconds:Show();
+		edOomMsg:Show();
 	else
 		lblOomThresh:Hide();
 		edOomThresh:Hide();
@@ -152,6 +153,7 @@ function chkWarningOom_OnClick()
 		lblOomInt:Hide();
 		edOomInt:Hide();
 		lblOomIntSeconds:Hide();
+		edOomMsg:Hide();
 	end
 end
 
@@ -182,6 +184,8 @@ function ManaWarningSettings_InitDefaults()
 	iHealthTreshhold = 50.0;
 	bHealthDoPotsCheck = true;
 	bHealthDoCombatCheck = true;
+	
+	sOomMsg = "OOM!";
 end
 
 function ManaWarningSettings_LoadFromVars()
@@ -202,6 +206,8 @@ function ManaWarningSettings_LoadFromVars()
 	chkWarningOom:SetChecked( bManaOomStatusAnnounce );
 	edOomThresh:SetNumber( iOomPercentageTreshhold );
 	edOomInt:SetNumber( iOomWarningTmr );
+	
+	edOomText:SetText( sOomMsg );
 end
 
 function ManaWarningSettings_SaveSettingsIntoVars()
@@ -222,6 +228,8 @@ function ManaWarningSettings_SaveSettingsIntoVars()
 	bManaOomStatusAnnounce	= chkWarningOom:GetChecked();
 	iOomPercentageTreshhold = edOomThresh:GetNumber();
 	iOomWarningTmr			= edOomInt:GetNumber();
+	
+	sOomMsg					= edOomText:GetText();
 end
 
 function ManaWarningSettings_Refresh()
@@ -241,7 +249,7 @@ function ManaWarningSettings_Refresh()
 end
 
 function ManaWarningSettings_LoadFromSavedVariables()
-	if ( table.getn(ManaWarning_Settings) == 15 ) then
+	if ( #(ManaWarning_Settings) >= 15 ) then
 		bManaWarningActive = ManaWarning_Settings[1];
 		iManaTreshhold = ManaWarning_Settings[2];
 		sManaWarningMsg = ManaWarning_Settings[3];
@@ -265,10 +273,16 @@ function ManaWarningSettings_LoadFromSavedVariables()
 		if iHealthTreshhold > 100.0 then
 			iHealthTreshhold = 50.0;
 		end
+		
+		if #(ManaWarning_Settings) >= 16 then
+			sOomMsg = ManaWarning_Settings[16];
+		end;
 	else
 		ManaWarningSettings_InitDefaults();
 		ManaWarningSettings_SaveToSavedVariables();
 	end
+	
+	
 end
 
 function ManaWarningSettings_SaveToSavedVariables()
@@ -288,6 +302,7 @@ function ManaWarningSettings_SaveToSavedVariables()
 	ManaWarning_Settings[13] = bManaOomStatusAnnounce;
 	ManaWarning_Settings[14] = iOomPercentageTreshhold;
 	ManaWarning_Settings[15] = iOomWarningTmr;
+	ManaWarning_Settings[16] = sOomMsg;
 end
 
 function btnRestoreDefaults_OnClick()

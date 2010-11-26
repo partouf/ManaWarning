@@ -23,6 +23,8 @@ iHealthTreshhold = 50.0;
 bHealthDoPotsCheck = true;
 bHealthDoCombatCheck = true;
 
+bDisableInPvp = true;
+
 sOomMsg = "OOM!";
 
 sPotionHint = "";
@@ -277,6 +279,10 @@ function ManaWarningSettings_LoadFromSavedVariables()
 		if #(ManaWarning_Settings) >= 16 then
 			sOomMsg = ManaWarning_Settings[16];
 		end;
+		
+		if #(ManaWarning_Settings) >= 17 then
+			bDisableInPvp = ManaWarning_Settings[17];
+		end
 	else
 		ManaWarningSettings_InitDefaults();
 		ManaWarningSettings_SaveToSavedVariables();
@@ -303,6 +309,7 @@ function ManaWarningSettings_SaveToSavedVariables()
 	ManaWarning_Settings[14] = iOomPercentageTreshhold;
 	ManaWarning_Settings[15] = iOomWarningTmr;
 	ManaWarning_Settings[16] = sOomMsg;
+	ManaWarning_Settings[17] = bDisableInPvp;
 end
 
 function btnRestoreDefaults_OnClick()
@@ -405,6 +412,17 @@ function ManaWarning_OnLoad(obj)
 	InterfaceOptions_AddCategory(obj);
 end
 
+function ManaWarning_PlayerIsInPvp()
+	for i=1, MAX_BATTLEFIELD_QUEUES do
+		sBattlefieldStatus = GetBattlefieldStatus(i);
+		if (sBattlefieldStatus == 'active') then
+			return true;
+		end
+	end
+	
+	return false;
+end
+
 -- OnEvent
 function ManaWarning_OnEvent( obj, event, ... )
    ManaWarning_CheckTasks();
@@ -414,21 +432,35 @@ function ManaWarning_OnEvent( obj, event, ... )
 
       bReady = true;
    elseif ( event == CONST_POWERUPDATE ) then
-		local unitId, resource = ...;
-		if ( bManaWarningActive or bManaOomStatusAnnounce ) then
-			if (resource == "MANA") then
-				--  or (resource == "FOCUS") ??
-				-- apparently you get updates for everyone in your party/raid, so check if we get a "player" update
-				if ( unitId == CONST_PLAYER ) then
-					ManaWarning_PlayerManaUpdate();
+		bDoCheck = true;
+		if bDisableInPvp then
+			bDoCheck = not ManaWarning_PlayerIsInPvp();
+		end
+   
+		if bDoCheck then
+			local unitId, resource = ...;
+			if ( bManaWarningActive or bManaOomStatusAnnounce ) then
+				if (resource == "MANA") then
+					--  or (resource == "FOCUS") ??
+					-- apparently you get updates for everyone in your party/raid, so check if we get a "player" update
+					if ( unitId == CONST_PLAYER ) then
+						ManaWarning_PlayerManaUpdate();
+					end
 				end
 			end
 		end
    elseif ( event == CONST_HEALTHUPDATE ) then
-		local unitId = ...;
-		if ( bHealthWarningActive ) then
-			if ( unitId == CONST_PLAYER ) then
-				ManaWarning_PlayerHealthUpdate();
+		bDoCheck = true;
+		if bDisableInPvp then
+			bDoCheck = not ManaWarning_PlayerIsInPvp();
+		end
+   
+		if bDoCheck then
+			local unitId = ...;
+			if ( bHealthWarningActive ) then
+				if ( unitId == CONST_PLAYER ) then
+					ManaWarning_PlayerHealthUpdate();
+				end
 			end
 		end
    end

@@ -89,7 +89,15 @@
 					</Anchor>
 				</Anchors>
 			</EditBox>
-			<CheckButton name="chkWarningOom" inherits="UICheckButtonTemplate">
+      <EditBox name="edManaFloodProtection" inherits="InputBoxTemplate" numeric="true">
+        <Size x="47" y="20" />
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset x="260" y="-251" />
+          </Anchor>
+        </Anchors>
+      </EditBox>
+      <CheckButton name="chkWarningOom" inherits="UICheckButtonTemplate">
 				<Size x="19" y="20" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
@@ -124,7 +132,7 @@
 					</Anchor>
 				</Anchors>
 			</EditBox>
-			<CheckButton name="chkWarningManaCombat" inherits="UICheckButtonTemplate">
+      <CheckButton name="chkWarningManaCombat" inherits="UICheckButtonTemplate">
 				<Size x="19" y="20" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
@@ -132,7 +140,15 @@
 					</Anchor>
 				</Anchors>
 			</CheckButton>
-			<CheckButton name="chkWarningManaChecks" inherits="UICheckButtonTemplate">
+      <CheckButton name="chkOnlyCheckPotionsInRaid" inherits="UICheckButtonTemplate">
+        <Size x="19" y="20" />
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset x="250" y="-370" />
+          </Anchor>
+        </Anchors>
+      </CheckButton>
+      <CheckButton name="chkWarningManaChecks" inherits="UICheckButtonTemplate">
 				<Size x="19" y="20" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
@@ -223,6 +239,14 @@
 						</Anchor>
 					</Anchors>
 				</FontString>
+        <FontString name="lblManaFloodProtection" inherits="GameFontNormalSmall" text="times" justifyH="LEFT">
+          <Size x="85" y="20" />
+          <Anchors>
+            <Anchor point="TOPLEFT">
+              <Offset x="315" y="-250" />
+            </Anchor>
+          </Anchors>
+        </FontString>
 				<FontString name="lblOomThresh" inherits="GameFontNormalSmall" text="Threshold" justifyH="RIGHT">
 					<Size x="73" y="20" />
 					<Anchors>

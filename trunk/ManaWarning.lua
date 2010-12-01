@@ -29,6 +29,10 @@ sOomMsg = "OOM!";
 
 sPotionHint = "";
 
+iManaFloodProtection = 99;
+iCurrentManaFloodCount = 0;
+bOnlyCheckPotionsInRaid = false;
+
 --
 -- IconHelpers
 icons1 = {
@@ -101,6 +105,7 @@ function chkWarningMana_OnClick()
 		lblManaInt:Show();
 		edManaInt:Show();
 		lblManaIntSeconds:Show();
+		edManaFloodProtection:Show();
 	else
 		edManaThresh:Hide();
 		lblManaThresh:Hide();
@@ -110,6 +115,7 @@ function chkWarningMana_OnClick()
 		lblManaInt:Hide();
 		edManaInt:Hide();
 		lblManaIntSeconds:Hide();
+		edManaFloodProtection:Hide();
 	end
 end
 
@@ -147,7 +153,7 @@ function chkWarningOom_OnClick()
 		lblOomInt:Show();
 		edOomInt:Show();
 		lblOomIntSeconds:Show();
-		edOomMsg:Show();
+		edOomText:Show();
 	else
 		lblOomThresh:Hide();
 		edOomThresh:Hide();
@@ -155,7 +161,7 @@ function chkWarningOom_OnClick()
 		lblOomInt:Hide();
 		edOomInt:Hide();
 		lblOomIntSeconds:Hide();
-		edOomMsg:Hide();
+		edOomText:Hide();
 	end
 end
 
@@ -187,6 +193,11 @@ function ManaWarningSettings_InitDefaults()
 	bHealthDoPotsCheck = true;
 	bHealthDoCombatCheck = true;
 	
+	iManaFloodProtection = 99;
+	iCurrentManaFloodCount = 0;
+	
+	bOnlyCheckPotionsInRaid = false;
+	
 	sOomMsg = "OOM!";
 end
 
@@ -210,6 +221,9 @@ function ManaWarningSettings_LoadFromVars()
 	edOomInt:SetNumber( iOomWarningTmr );
 	
 	edOomText:SetText( sOomMsg );
+	
+	edManaFloodProtection:SetNumber( iManaFloodProtection );
+	chkOnlyCheckPotionsInRaid:SetChecked( bOnlyCheckPotionsInRaid );
 end
 
 function ManaWarningSettings_SaveSettingsIntoVars()
@@ -232,6 +246,9 @@ function ManaWarningSettings_SaveSettingsIntoVars()
 	iOomWarningTmr			= edOomInt:GetNumber();
 	
 	sOomMsg					= edOomText:GetText();
+	
+	iManaFloodProtection    = edManaFloodProtection:GetNumber();
+	bOnlyCheckPotionsInRaid = chkOnlyCheckPotionsInRaid:GetChecked();
 end
 
 function ManaWarningSettings_Refresh()
@@ -242,6 +259,7 @@ function ManaWarningSettings_Refresh()
 	chkWarningManaChecksText:SetText( "Check cooldowns" );
 	chkWarningHealthCombatText:SetText( "Only when in combat" );
 	chkWarningHealthChecksText:SetText( "Check cooldowns" );
+	chkOnlyCheckPotionsInRaidText:SetText( "Only check potions in raid" );
 	
 	ManaWarningSettings_LoadFromVars();
 	
@@ -283,6 +301,14 @@ function ManaWarningSettings_LoadFromSavedVariables()
 		if #(ManaWarning_Settings) >= 17 then
 			bDisableInPvp = ManaWarning_Settings[17];
 		end
+
+		if #(ManaWarning_Settings) >= 18 then
+			iManaFloodProtection = ManaWarning_Settings[18];
+		end
+		
+		if #(ManaWarning_Settings) >= 19 then
+			bOnlyCheckPotionsInRaid = ManaWarning_Settings[19];
+		end
 	else
 		ManaWarningSettings_InitDefaults();
 		ManaWarningSettings_SaveToSavedVariables();
@@ -310,6 +336,9 @@ function ManaWarningSettings_SaveToSavedVariables()
 	ManaWarning_Settings[15] = iOomWarningTmr;
 	ManaWarning_Settings[16] = sOomMsg;
 	ManaWarning_Settings[17] = bDisableInPvp;
+	ManaWarning_Settings[18] = iManaFloodProtection;
+	ManaWarning_Settings[19] = bOnlyCheckPotionsInRaid;
+	ManaWarning_Settings[20] = -1;	-- reserved so 19 wont be lost
 end
 
 function btnRestoreDefaults_OnClick()
@@ -570,20 +599,37 @@ function ManaWarning_TimeManaOnCooldown()
          sPotionHint = "Shadowfiend";
          return 0;
       end
+
+      iSpCd = getSpellCD( "Hymn of Hope" );
+      if ( iSpCd < iLowestRemainingTime ) then
+		iLowestRemainingTime = iSpCd;
+      end
+      if ( iSpCd == 0 ) then
+		sPotionHint = "Hymn of Hope";
+		return 0;
+      end
    elseif ( enClass == "SHAMAN" ) then
-		iSpCd = getSpellCD("Mana Tide Totem")
-		
-		if ( iSpCd == 0 ) and not HasManaTideTotemOut() then
-			sPotionHint = "Mana Tide Totem";
-			return 0;
-		end
+      iSpCd = getSpellCD("Mana Tide Totem")
+
+      if ( iSpCd == 0 ) and not HasManaTideTotemOut() then
+         sPotionHint = "Mana Tide Totem";
+         return 0;
+      end
    end
    
-   iLowestRemainingTime = getLowestCDInArrayOfItems( iLowestRemainingTime, MANA_RESTORING_STUFF_B );
-   if ( iLowestRemainingTime == 0 ) then
-      return 0;
+   bCheckPots = false;
+   if bOnlyCheckPotionsInRaid then
+      bCheckPots = UnitInRaid(CONST_PLAYER);
+   else
+      bCheckPots = true;
    end
 
+   if bCheckPots then
+	   iLowestRemainingTime = getLowestCDInArrayOfItems( iLowestRemainingTime, MANA_RESTORING_STUFF_B );
+	   if ( iLowestRemainingTime == 0 ) then
+		  return 0;
+	   end
+   end
 
    if ( enClass == "HUNTER" ) then
 		-- used to be stuff with Aspect of the Viper :(
@@ -604,9 +650,18 @@ function ManaWarning_TimeHealthOnCooldown()
       return 0;
    end
    
-   iLowestRemainingTime = getLowestCDInArrayOfItems( iLowestRemainingTime, HEALTH_RESTORING_STUFF_B );
-   if ( iLowestRemainingTime == 0 ) then
-      return 0;
+   bCheckPots = false;
+   if bOnlyCheckPotionsInRaid then
+      bCheckPots = UnitInRaid(CONST_PLAYER);
+   else
+      bCheckPots = true;
+   end
+
+   if bCheckPots then
+      iLowestRemainingTime = getLowestCDInArrayOfItems( iLowestRemainingTime, HEALTH_RESTORING_STUFF_B );
+      if ( iLowestRemainingTime == 0 ) then
+         return 0;
+      end
    end
 
    return iLowestRemainingTime;
@@ -663,12 +718,11 @@ function ManaWarning_PlayerManaUpdate()
 			 bManaOOMWarningGiven = true;
 
 			 if ( bManaDoPotsCheck ) then
-				ManaWarning_MessagePartyRaid( sOomMsg.." (CD's "..iLowestRemainingTime.."s)" );
+			    ManaWarning_MessagePartyRaid( sOomMsg.." (CD's "..iLowestRemainingTime.."s)" );
 			 else
 				ManaWarning_MessagePartyRaid( sOomMsg );
-			 end
-
-			 ManaWarning_Schedule( iOomWarningTmr, ManaWarning_ResetManaOOMWarningGiven );
+             end
+             ManaWarning_Schedule( iOomWarningTmr, ManaWarning_ResetManaOOMWarningGiven );
 		  end
 	   end
 
@@ -681,16 +735,23 @@ function ManaWarning_PlayerManaUpdate()
 				iLowestRemainingTime = iManaWarningTmr;
 			 end
 
-			 ManaWarning_Schedule( iLowestRemainingTime, ManaWarning_ResetManaWarningGiven );
+             ManaWarning_Schedule( iLowestRemainingTime, ManaWarning_ResetManaWarningGiven );
 
-             if ( bManaDoPotsCheck ) then
-                if not ( sPotionHint == "" ) then
-                   ManaWarning_MessageSelf( sManaWarningMsg .. " (Try using " .. sPotionHint .. ")");
-                end
-             else
-				ManaWarning_MessageSelf( sManaWarningMsg );
-             end
+             if iCurrentManaFloodCount < iManaFloodProtection then
+				iCurrentManaFloodCount = iCurrentManaFloodCount + 1;
+
+				if ( bManaDoPotsCheck ) then
+					if not ( sPotionHint == "" ) then
+						ManaWarning_MessageSelf( sManaWarningMsg .. " (Try using " .. sPotionHint .. ")");
+					end
+				else
+					ManaWarning_MessageSelf( sManaWarningMsg );
+		        end
+		     end
 		  else
+			 -- reset flood protection once you're above the treshhold
+             iCurrentManaFloodCount = 0;
+
 			-- class specific stuff once no more below treshhold
 			--locClass, enClass = UnitClass( CONST_PLAYER );
 			--if ( enClass == "HUNTER" ) then

@@ -528,20 +528,25 @@ end
 function getSpellCD( sName )
    current_time = GetTime();
 
-   spell_start, spell_dur, spell_en = GetSpellCooldown( sName );
-   if ( spell_start ) then
-		if spell_dur < 1.5 then	-- ignore gcd
-			return 0;
-		else
-		   if ( spell_start > 0 ) then
-			  remaining_time = floor( spell_dur - (current_time - spell_start) );
+   usable, nomana = IsUsableSpell( sName );
+   if ( usable ) then
+	   spell_start, spell_dur, spell_en = GetSpellCooldown( sName );
+	   if ( spell_start ) then
+			if spell_dur < 1.5 then	-- ignore gcd
+				return 0;
+			else
+			   if ( spell_start > 0 ) then
+				  remaining_time = floor( spell_dur - (current_time - spell_start) );
 
-			  return remaining_time;
-		   end
-		end
-   end
-   
-   return 0;
+				  return remaining_time;
+			   end
+			end
+	   end
+	   
+	   return 0;
+	end
+	
+	return 600;
 end
 
 function HasManaTideTotemOut()

@@ -380,6 +380,9 @@ MANA_RESTORING_STUFF_A = {
 
 -- Shared cooldown mana pots
 MANA_RESTORING_STUFF_B = {
+	[57192] = "Mythical Mana Potion",
+	[57193] = "Mighty Rejuvenation Potion",
+	[57194] = "Potion of Concentration",
 	[40077] = "Crazy Alchemist's Potion",
 	[42545] = "Runic Mana Injector",
 	[33448] = "Runic Mana Potion",
@@ -407,6 +410,8 @@ HEALTH_RESTORING_STUFF_A = {
 
 -- Shared cooldown mana pots
 HEALTH_RESTORING_STUFF_B = {
+	[57191] = "Mythical Healing Potion",
+	[57193] = "Mighty Rejuvenation Potion",
 	[40077] = "Crazy Alchemist's Potion",
 	[41166] = "Runic Healing Injector",
 	[33447] = "Runic Healing Potion",
@@ -442,11 +447,8 @@ function ManaWarning_OnLoad(obj)
 end
 
 function ManaWarning_PlayerIsInPvp()
-	for i=1, MAX_BATTLEFIELD_QUEUES do
-		sBattlefieldStatus = GetBattlefieldStatus(i);
-		if (sBattlefieldStatus == 'active') then
-			return true;
-		end
+	if UnitIsPVP(CONST_PLAYER) then
+		return true;
 	end
 	
 	return false;
@@ -677,7 +679,13 @@ function ManaWarning_MessagePartyRaid( sMsg )
    RaidNotice_AddMessage(RaidBossEmoteFrame, sMsg2, ChatTypeInfo["RAID_WARNING"]);
 
    if ( UnitInRaid( CONST_PLAYER ) ) then
-      SendChatMessage( sMsg, "RAID", nil, "" );
+      if not ManaWarning_PlayerIsInPvp() then
+		SendChatMessage( sMsg, "RAID", nil, "" );
+      else
+        if DEFAULT_CHAT_FRAME then
+          DEFAULT_CHAT_FRAME:AddMessage( sMsg2, 1.0, 0.0, 0.0);
+        end
+      end
    elseif ( GetPartyMember(1) == 1 ) then
       SendChatMessage( sMsg, "PARTY", nil, "" );
    else

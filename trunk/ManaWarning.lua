@@ -369,6 +369,7 @@ bDebug = false;
 
 -- Mage shared cooldown gems
 MANA_RESTORING_STUFF_A = {
+	[36799] = "Mana Gem",
 	[33312] = "Mana Sapphire",
 	[22044] = "Mana Emerald",
 	[8008] = "Mana Sapphire",

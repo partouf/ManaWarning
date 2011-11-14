@@ -33,6 +33,8 @@ iManaFloodProtection = 99;
 iCurrentManaFloodCount = 0;
 bOnlyCheckPotionsInRaid = false;
 
+bAnnounceOomToParty = false;
+
 --
 -- IconHelpers
 icons1 = {
@@ -154,6 +156,7 @@ function chkWarningOom_OnClick()
 		edOomInt:Show();
 		lblOomIntSeconds:Show();
 		edOomText:Show();
+		chkAnnounceOomToParty:Show();
 	else
 		lblOomThresh:Hide();
 		edOomThresh:Hide();
@@ -162,6 +165,7 @@ function chkWarningOom_OnClick()
 		edOomInt:Hide();
 		lblOomIntSeconds:Hide();
 		edOomText:Hide();
+		chkAnnounceOomToParty:Hide();
 	end
 end
 
@@ -197,6 +201,7 @@ function ManaWarningSettings_InitDefaults()
 	iCurrentManaFloodCount = 0;
 	
 	bOnlyCheckPotionsInRaid = false;
+	bAnnounceOomToParty = false;
 	
 	sOomMsg = "OOM!";
 end
@@ -224,6 +229,8 @@ function ManaWarningSettings_LoadFromVars()
 	
 	edManaFloodProtection:SetNumber( iManaFloodProtection );
 	chkOnlyCheckPotionsInRaid:SetChecked( bOnlyCheckPotionsInRaid );
+
+	chkAnnounceOomToParty:SetChecked( bAnnounceOomToParty );
 end
 
 function ManaWarningSettings_SaveSettingsIntoVars()
@@ -249,6 +256,8 @@ function ManaWarningSettings_SaveSettingsIntoVars()
 	
 	iManaFloodProtection    = edManaFloodProtection:GetNumber();
 	bOnlyCheckPotionsInRaid = chkOnlyCheckPotionsInRaid:GetChecked();
+
+	bAnnounceOomToParty     = chkAnnounceOomToParty:GetChecked();
 end
 
 function ManaWarningSettings_Refresh()
@@ -260,6 +269,7 @@ function ManaWarningSettings_Refresh()
 	chkWarningHealthCombatText:SetText( "Only when in combat" );
 	chkWarningHealthChecksText:SetText( "Check cooldowns" );
 	chkOnlyCheckPotionsInRaidText:SetText( "Only check potions in raid" );
+	chkAnnounceOomToPartyText:SetText( "Announce OOM to party" );
 	
 	ManaWarningSettings_LoadFromVars();
 	
@@ -309,6 +319,10 @@ function ManaWarningSettings_LoadFromSavedVariables()
 		if #(ManaWarning_Settings) >= 19 then
 			bOnlyCheckPotionsInRaid = ManaWarning_Settings[19];
 		end
+
+		if #(ManaWarning_Settings) >= 20 then
+			bAnnounceOomToParty = ManaWarning_Settings[20];
+		end
 	else
 		ManaWarningSettings_InitDefaults();
 		ManaWarningSettings_SaveToSavedVariables();
@@ -338,7 +352,8 @@ function ManaWarningSettings_SaveToSavedVariables()
 	ManaWarning_Settings[17] = bDisableInPvp;
 	ManaWarning_Settings[18] = iManaFloodProtection;
 	ManaWarning_Settings[19] = bOnlyCheckPotionsInRaid;
-	ManaWarning_Settings[20] = -1;	-- reserved so 19 wont be lost
+	ManaWarning_Settings[20] = bAnnounceOomToParty;
+	ManaWarning_Settings[21] = -1;
 end
 
 function btnRestoreDefaults_OnClick()
@@ -687,7 +702,7 @@ function ManaWarning_MessagePartyRaid( sMsg )
           DEFAULT_CHAT_FRAME:AddMessage( sMsg2, 1.0, 0.0, 0.0);
         end
       end
-   elseif ( GetPartyMember(1) == 1 ) then
+   elseif ( GetPartyMember(1) == 1 ) and (bAnnounceOomToParty) then
       SendChatMessage( sMsg, "PARTY", nil, "" );
    else
       if DEFAULT_CHAT_FRAME then

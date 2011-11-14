@@ -1,8 +1,8 @@
 ## Author: Kwast of Draenor
-## Interface: 40000
+## Interface: 40200
 ## SavedVariablesPerCharacter: ManaWarning_Settings
 ## Title: ManaWarning
-## Version: 2.8
+## Version: 2.9
 ## X-eMail: partouf@gmail.com
 ManaWarning.xml
 ManaWarning.lua

@@ -128,11 +128,19 @@
 				<Size x="19" y="20" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="260" y="-337" />
+						<Offset x="250" y="-337" />
 					</Anchor>
 				</Anchors>
 			</CheckButton>
-      <EditBox name="edOomInt" inherits="InputBoxTemplate" numeric="true">
+			<CheckButton name="chkAnnounceOomToRaid" inherits="UICheckButtonTemplate">
+				<Size x="19" y="20" />
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="400" y="-337" />
+					</Anchor>
+				</Anchors>
+			</CheckButton>
+			<EditBox name="edOomInt" inherits="InputBoxTemplate" numeric="true">
 				<Size x="47" y="20" />
 				<Anchors>
 					<Anchor point="TOPLEFT">

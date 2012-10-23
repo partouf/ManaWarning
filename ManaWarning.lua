@@ -36,6 +36,8 @@ bOnlyCheckPotionsInRaid = false;
 bAnnounceOomToParty = false;
 bAnnounceOomToRaid = true;
 
+sCurrentSpecName = "";
+
 --
 -- IconHelpers
 icons1 = {
@@ -377,6 +379,7 @@ CONST_VARSLOADED = "VARIABLES_LOADED";
 CONST_POWERUPDATE = "UNIT_POWER";
 CONST_HEALTHUPDATE = "UNIT_HEALTH";
 CONST_PLAYER = "player";
+CONST_SPEC_CHANGE = "ACTIVE_TALENT_GROUP_CHANGED";
 
 -- vars
 bReady = false;
@@ -459,6 +462,7 @@ function ManaWarning_OnLoad(obj)
 	obj:RegisterEvent( CONST_VARSLOADED );
 	obj:RegisterEvent( CONST_POWERUPDATE );
 	obj:RegisterEvent( CONST_HEALTHUPDATE );
+	obj:RegisterEvent( CONST_SPEC_CHANGE );
 
 	obj.name = "ManaWarning";
         obj.okay = function (obj) btnSave_OnClick(); end;
@@ -467,6 +471,8 @@ function ManaWarning_OnLoad(obj)
 	obj.refresh = function (obj) ManaWarningSettings_Refresh(); end;
 
 	InterfaceOptions_AddCategory(obj);
+	
+	sCurrentSpecName = GetCurrentTalentSpec();
 end
 
 function ManaWarning_PlayerIsInPvp()
@@ -517,7 +523,9 @@ function ManaWarning_OnEvent( obj, event, ... )
 				end
 			end
 		end
-   end
+	elseif ( event == CONST_SPEC_CHANGE ) then
+		ManaWarning_PlayerSpecChange();
+	end
 end
 
 function getLowestCDInArrayOfItems( iHighestCD, array )
@@ -620,6 +628,16 @@ function ManaWarning_TimeManaOnCooldown()
          return 0;
       end
    elseif ( enClass == "PRIEST" ) then
+      iSpCd = getSpellCD( "Mindbender" );
+
+      if ( iSpCd < iLowestRemainingTime ) then
+         iLowestRemainingTime = iSpCd;
+      end
+      if ( iSpCd == 0 ) then
+         sPotionHint = "Mindbender";
+         return 0;
+      end
+	 
       iSpCd = getSpellCD( "Shadowfiend" );
 
       if ( iSpCd < iLowestRemainingTime ) then
@@ -632,11 +650,11 @@ function ManaWarning_TimeManaOnCooldown()
 
       iSpCd = getSpellCD( "Hymn of Hope" );
       if ( iSpCd < iLowestRemainingTime ) then
-		iLowestRemainingTime = iSpCd;
+				iLowestRemainingTime = iSpCd;
       end
       if ( iSpCd == 0 ) then
-		sPotionHint = "Hymn of Hope";
-		return 0;
+				sPotionHint = "Hymn of Hope";
+				return 0;
       end
    elseif ( enClass == "SHAMAN" ) then
       iSpCd = getSpellCD("Mana Tide Totem")
@@ -832,6 +850,10 @@ function ManaWarning_PlayerHealthUpdate()
    end
 end
 
+-- PlayerSpecChange
+function ManaWarning_PlayerSpecChange()
+	sCurrentSpecName = GetCurrentTalentSpec();
+end
 
 -- Resets a boolean, so the ManaWarning will again show on the screen if we're still without mana
 function ManaWarning_ResetManaWarningGiven()
@@ -845,4 +867,10 @@ end
 -- Resets a boolean, so the OOM-message will again show
 function ManaWarning_ResetManaOOMWarningGiven()
    bManaOOMWarningGiven = false;
+end
+
+-- Returns current Talent specialization
+function GetCurrentTalentSpec()
+	local currentSpec = GetSpecialization()
+	return currentSpec and select(2, GetSpecializationInfo(currentSpec)) or "None"
 end

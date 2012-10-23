@@ -400,6 +400,7 @@ MANA_RESTORING_STUFF_A = {
 
 -- Shared cooldown mana pots
 MANA_RESTORING_STUFF_B = {
+	[76098] = "Master Mana Potion",
 	[57192] = "Mythical Mana Potion",
 	[57193] = "Mighty Rejuvenation Potion",
 	[57194] = "Potion of Concentration",
@@ -430,6 +431,8 @@ HEALTH_RESTORING_STUFF_A = {
 
 -- Shared cooldown mana pots
 HEALTH_RESTORING_STUFF_B = {
+	[80040] = "Endless Master Healing Potion",
+	[76097] = "Master Healing Potion",
 	[57191] = "Mythical Healing Potion",
 	[57193] = "Mighty Rejuvenation Potion",
 	[40077] = "Crazy Alchemist's Potion",

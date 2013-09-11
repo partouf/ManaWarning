@@ -1,8 +1,8 @@
 ## Author: Kwast of Aszune
-## Interface: 50300
+## Interface: 50400
 ## SavedVariablesPerCharacter: ManaWarning_Settings
 ## Title: ManaWarning
-## Version: 3.8
+## Version: 3.9
 ## X-eMail: partouf@gmail.com
 ManaWarning.xml
 ManaWarning.lua

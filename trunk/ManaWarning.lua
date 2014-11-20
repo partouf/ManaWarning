@@ -391,18 +391,20 @@ bDebug = false;
 
 -- Mage shared cooldown gems
 MANA_RESTORING_STUFF_A = {
-	[36799] = "Mana Gem",
-	[33312] = "Mana Sapphire",
-	[22044] = "Mana Emerald",
-	[8008] = "Mana Sapphire",
-	[8007] = "Mana Citrine",
-	[5513] = "Mana Jade",
-	[5514] = "Mana Agate",
+	--[36799] = "Mana Gem",
+	--[33312] = "Mana Sapphire",
+	--[22044] = "Mana Emerald",
+	--[8008] = "Mana Sapphire",
+	--[8007] = "Mana Citrine",
+	--[5513] = "Mana Jade",
+	--[5514] = "Mana Agate",
 };
 
 
 -- Shared cooldown mana pots
 MANA_RESTORING_STUFF_B = {
+	[109222] = "Draenic Mana Potion",
+	[109221] = "Draenic Channeled Mana Potion",
 	[76098] = "Master Mana Potion",
 	[57192] = "Mythical Mana Potion",
 	[57193] = "Mighty Rejuvenation Potion",
@@ -434,6 +436,7 @@ HEALTH_RESTORING_STUFF_A = {
 
 -- Shared cooldown mana pots
 HEALTH_RESTORING_STUFF_B = {
+	[109223] = "Healing Tonic",
 	[80040] = "Endless Master Healing Potion",
 	[76097] = "Master Healing Potion",
 	[57191] = "Mythical Healing Potion",
@@ -582,18 +585,18 @@ function getSpellCD( sName )
 	return 600;
 end
 
-function HasManaTideTotemOut()
-	for i = 1, 40 do
-		local buff = UnitBuff(CONST_PLAYER, i);
-		if buff then
-			if (buff == "Mana Tide Totem") then
-				return true;
-			end
-		end
-	end
-	
-	return false;
-end
+--function HasManaTideTotemOut()
+--	for i = 1, 40 do
+--		local buff = UnitBuff(CONST_PLAYER, i);
+--		if buff then
+--			if (buff == "Mana Tide Totem") then
+--				return true;
+--			end
+--		end
+--	end
+--	
+--	return false;
+--end
 
 -- Are all Mana restoring items on cooldown?
 function ManaWarning_TimeManaOnCooldown()
@@ -608,15 +611,15 @@ function ManaWarning_TimeManaOnCooldown()
    locClass, enClass = UnitClass( CONST_PLAYER );
 
    if ( enClass == "DRUID" ) then
-      iSpCd = getSpellCD( "Innervate" );
+--      iSpCd = getSpellCD( "Innervate" );
 
-      if ( iSpCd < iLowestRemainingTime ) then
-         iLowestRemainingTime = iSpCd;
-      end
-      if ( iSpCd == 0 ) then
-         sPotionHint = "Innervate";
-         return 0;
-      end
+--      if ( iSpCd < iLowestRemainingTime ) then
+--         iLowestRemainingTime = iSpCd;
+--      end
+--      if ( iSpCd == 0 ) then
+--         sPotionHint = "Innervate";
+--         return 0;
+--      end
    elseif ( enClass == "MAGE" ) then
       iSpCd = getSpellCD( "Evocation" );
 
@@ -648,21 +651,21 @@ function ManaWarning_TimeManaOnCooldown()
          return 0;
       end
 
-      iSpCd = getSpellCD( "Hymn of Hope" );
-      if ( iSpCd < iLowestRemainingTime ) then
-				iLowestRemainingTime = iSpCd;
-      end
-      if ( iSpCd == 0 ) then
-				sPotionHint = "Hymn of Hope";
-				return 0;
-      end
+--      iSpCd = getSpellCD( "Hymn of Hope" );
+--      if ( iSpCd < iLowestRemainingTime ) then
+--				iLowestRemainingTime = iSpCd;
+--      end
+--      if ( iSpCd == 0 ) then
+--				sPotionHint = "Hymn of Hope";
+--				return 0;
+--      end
    elseif ( enClass == "SHAMAN" ) then
-      iSpCd = getSpellCD("Mana Tide Totem")
+--      iSpCd = getSpellCD("Mana Tide Totem")
 
-      if ( iSpCd == 0 ) and not HasManaTideTotemOut() then
-         sPotionHint = "Mana Tide Totem";
-         return 0;
-      end
+--      if ( iSpCd == 0 ) and not HasManaTideTotemOut() then
+--         sPotionHint = "Mana Tide Totem";
+--         return 0;
+--      end
    end
    
    bCheckPots = false;

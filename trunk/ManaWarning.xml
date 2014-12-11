@@ -124,6 +124,14 @@
           </Anchor>
         </Anchors>
       </EditBox>
+	  			<CheckButton name="chkAnnounceOomToInstance" inherits="UICheckButtonTemplate">
+				<Size x="19" y="20" />
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="400" y="-310" />
+					</Anchor>
+				</Anchors>
+			</CheckButton>
 			<CheckButton name="chkAnnounceOomToParty" inherits="UICheckButtonTemplate">
 				<Size x="19" y="20" />
 				<Anchors>

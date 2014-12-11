@@ -2,7 +2,7 @@
 ## Interface: 60000
 ## SavedVariablesPerCharacter: ManaWarning_Settings
 ## Title: ManaWarning
-## Version: 4.0
+## Version: 4.1
 ## X-eMail: partouf@gmail.com
 ManaWarning.xml
 ManaWarning.lua

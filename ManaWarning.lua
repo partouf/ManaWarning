@@ -34,6 +34,7 @@ iCurrentManaFloodCount = 0;
 bOnlyCheckPotionsInRaid = false;
 
 bAnnounceOomToParty = false;
+bAnnounceOomToInstance = false;
 bAnnounceOomToRaid = true;
 
 sCurrentSpecName = "";
@@ -160,6 +161,7 @@ function chkWarningOom_OnClick()
 		lblOomIntSeconds:Show();
 		edOomText:Show();
 		chkAnnounceOomToParty:Show();
+		chkAnnounceOomToInstance:Show();
 		chkAnnounceOomToRaid:Show();
 	else
 		lblOomThresh:Hide();
@@ -170,6 +172,7 @@ function chkWarningOom_OnClick()
 		lblOomIntSeconds:Hide();
 		edOomText:Hide();
 		chkAnnounceOomToParty:Hide();
+		chkAnnounceOomToInstance:Hide();
 		chkAnnounceOomToRaid:Hide();
 	end
 end
@@ -207,6 +210,7 @@ function ManaWarningSettings_InitDefaults()
 	
 	bOnlyCheckPotionsInRaid = false;
 	bAnnounceOomToParty = false;
+	bAnnounceOomToInstance = false;
 	
 	sOomMsg = "OOM!";
 
@@ -238,6 +242,7 @@ function ManaWarningSettings_LoadFromVars()
 	chkOnlyCheckPotionsInRaid:SetChecked( bOnlyCheckPotionsInRaid );
 
 	chkAnnounceOomToParty:SetChecked( bAnnounceOomToParty );
+	chkAnnounceOomToParty:SetChecked( bAnnounceOomToInstance );
 	chkAnnounceOomToRaid:SetChecked( bAnnounceOomToRaid );
 end
 
@@ -266,6 +271,7 @@ function ManaWarningSettings_SaveSettingsIntoVars()
 	bOnlyCheckPotionsInRaid = chkOnlyCheckPotionsInRaid:GetChecked();
 
 	bAnnounceOomToParty     = chkAnnounceOomToParty:GetChecked();
+	bAnnounceOomToInstance  = chkAnnounceOomToInstance:GetChecked();
 	bAnnounceOomToRaid		= chkAnnounceOomToRaid:GetChecked();
 end
 
@@ -279,6 +285,7 @@ function ManaWarningSettings_Refresh()
 	chkWarningHealthChecksText:SetText( "Check cooldowns" );
 	chkOnlyCheckPotionsInRaidText:SetText( "Only check potions in raid" );
 	chkAnnounceOomToPartyText:SetText( "Announce OOM to party" );
+	chkAnnounceOomToInstanceText:SetText( "Announce OOM to instance" );
 	chkAnnounceOomToRaidText:SetText( "Announce OOM to raid" );
 	
 	ManaWarningSettings_LoadFromVars();
@@ -328,6 +335,11 @@ function ManaWarningSettings_LoadFromSavedVariables()
 		bAnnounceOomToParty = ManaWarning_Settings[20];
 		bAnnounceOomToRaid = ManaWarning_Settings[21];
 
+		if ManaWarning_Settings[22] == -1 then
+			-- old, default to false
+		else
+			bAnnounceOomToInstance = ManaWarning_Settings[22];
+		end
 	else
 		ManaWarningSettings_InitDefaults();
 		ManaWarningSettings_SaveToSavedVariables();
@@ -359,7 +371,7 @@ function ManaWarningSettings_SaveToSavedVariables()
 	ManaWarning_Settings[19] = bOnlyCheckPotionsInRaid;
 	ManaWarning_Settings[20] = bAnnounceOomToParty;
 	ManaWarning_Settings[21] = bAnnounceOomToRaid;
-	ManaWarning_Settings[22] = -1;
+	ManaWarning_Settings[22] = bAnnounceOomToInstance;
 end
 
 function btnRestoreDefaults_OnClick()
@@ -716,17 +728,29 @@ function ManaWarning_MessagePartyRaid( sMsg )
    local sMsg2 = ManaWarning_ResolveIcons( sMsg );
    RaidNotice_AddMessage(RaidBossEmoteFrame, sMsg2, ChatTypeInfo["RAID_WARNING"]);
 
+   local done = false;
+   
    if ( UnitInRaid( CONST_PLAYER ) ) then
       if (bAnnounceOomToRaid) and not ManaWarning_PlayerIsInPvp() then
-		SendChatMessage( sMsg, "RAID", nil, "" );
+        SendChatMessage( sMsg, "RAID", nil, "" );
+        done = true;
       else
         if DEFAULT_CHAT_FRAME then
           DEFAULT_CHAT_FRAME:AddMessage( sMsg2, 1.0, 0.0, 0.0);
+          done = true;
         end
       end
-   elseif (bAnnounceOomToParty) and ( GetPartyMember(1) == 1 ) then
+   elseif (bAnnounceOomToInstance) and IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
+      SendChatMessage( sMsg, "INSTANCE_CHAT", nil, "" );
+      done = true;
+   end;
+
+   if not done and bAnnounceOomToParty and IsInGroup() then
       SendChatMessage( sMsg, "PARTY", nil, "" );
-   else
+      done = true;
+   end;
+   
+   if not done then
       if DEFAULT_CHAT_FRAME then
          DEFAULT_CHAT_FRAME:AddMessage( sMsg2, 1.0, 0.0, 0.0);
       end

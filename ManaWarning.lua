@@ -42,345 +42,345 @@ sCurrentSpecName = "";
 --
 -- IconHelpers
 icons1 = {
-	star = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t",
-	circle = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t",
-	diamond = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_3:0|t",
-	triangle = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_4:0|t",
-	moon = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_5:0|t",
-	square = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_6:0|t",
-	cross = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_7:0|t",
-	skull = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_8:0|t",
+    star = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t",
+    circle = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t",
+    diamond = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_3:0|t",
+    triangle = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_4:0|t",
+    moon = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_5:0|t",
+    square = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_6:0|t",
+    cross = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_7:0|t",
+    skull = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_8:0|t",
 }
 icons2 = {
-	rt1 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t",
-	rt2 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t",
-	rt3 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_3:0|t",
-	rt4 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_4:0|t",
-	rt5 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_5:0|t",
-	rt6 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_6:0|t",
-	rt7 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_7:0|t",
-	rt8 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_8:0|t",
+    rt1 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_1:0|t",
+    rt2 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_2:0|t",
+    rt3 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_3:0|t",
+    rt4 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_4:0|t",
+    rt5 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_5:0|t",
+    rt6 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_6:0|t",
+    rt7 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_7:0|t",
+    rt8 = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_8:0|t",
 }
 
 function ManaWarning_ResolveIcons( s1 )
-	local s2 = s1;
-	for sIconName,sImageLink in pairs(icons1) do
-		s2 = string.gsub( s2, "{"..sIconName.."}", sImageLink );
-	end
-	for sIconName,sImageLink in pairs(icons2) do
-		s2 = string.gsub( s2, "{"..sIconName.."}", sImageLink );
-	end
-	return s2;
+    local s2 = s1;
+    for sIconName,sImageLink in pairs(icons1) do
+        s2 = string.gsub( s2, "{"..sIconName.."}", sImageLink );
+    end
+    for sIconName,sImageLink in pairs(icons2) do
+        s2 = string.gsub( s2, "{"..sIconName.."}", sImageLink );
+    end
+    return s2;
 end
 
 -- timer stuff
 ManaWarning_Timers = {};
 function ManaWarning_Schedule( t, f )
-	local now = GetTime();
-	local task = { now + t, f };
-	tinsert( ManaWarning_Timers, task );
+    local now = GetTime();
+    local task = { now + t, f };
+    tinsert( ManaWarning_Timers, task );
 end
 
 function ManaWarning_CheckTasks()
-	local c = #(ManaWarning_Timers);
-	local i = 1;
-	while i <= c do
-		local task = ManaWarning_Timers[i];
-		if GetTime() > task[1] then
-			tremove( ManaWarning_Timers, i );
-			c = c - 1;
-			i = i - 1;
+    local c = #(ManaWarning_Timers);
+    local i = 1;
+    while i <= c do
+        local task = ManaWarning_Timers[i];
+        if GetTime() > task[1] then
+            tremove( ManaWarning_Timers, i );
+            c = c - 1;
+            i = i - 1;
 
-			local f = task[2];
-			f();
-		end
-		i = i + 1;
-	end
+            local f = task[2];
+            f();
+        end
+        i = i + 1;
+    end
 end
 
 -- 
 
 
 function chkWarningMana_OnClick()
-	if ( chkWarningMana:GetChecked() ) then
-		edManaThresh:Show();
-		lblManaThresh:Show();
-		lblMana:Show();
-		lblManaText:Show();
-		edManaText:Show();
-		lblManaInt:Show();
-		edManaInt:Show();
-		lblManaIntSeconds:Show();
-		edManaFloodProtection:Show();
-	else
-		edManaThresh:Hide();
-		lblManaThresh:Hide();
-		lblMana:Hide();
-		lblManaText:Hide();
-		edManaText:Hide();
-		lblManaInt:Hide();
-		edManaInt:Hide();
-		lblManaIntSeconds:Hide();
-		edManaFloodProtection:Hide();
-	end
+    if ( chkWarningMana:GetChecked() ) then
+        edManaThresh:Show();
+        lblManaThresh:Show();
+        lblMana:Show();
+        lblManaText:Show();
+        edManaText:Show();
+        lblManaInt:Show();
+        edManaInt:Show();
+        lblManaIntSeconds:Show();
+        edManaFloodProtection:Show();
+    else
+        edManaThresh:Hide();
+        lblManaThresh:Hide();
+        lblMana:Hide();
+        lblManaText:Hide();
+        edManaText:Hide();
+        lblManaInt:Hide();
+        edManaInt:Hide();
+        lblManaIntSeconds:Hide();
+        edManaFloodProtection:Hide();
+    end
 end
 
 function chkWarningHealth_OnClick()
-	if ( chkWarningHealth:GetChecked() ) then
-		edHealthThresh:Show();
-		lblHealthThresh:Show();
-		lblHealth:Show();
-		chkWarningHealthCombat:Show();
-		chkWarningHealthChecks:Show();
-		lblHealthText:Show();
-		edHealthText:Show();
-		lblHealthInt:Show();
-		edHealthInt:Show();
-		lblHealthIntSeconds:Show();
-	else
-		edHealthThresh:Hide();
-		lblHealthThresh:Hide();
-		lblHealth:Hide();
-		chkWarningHealthCombat:Hide();
-		chkWarningHealthChecks:Hide();
-		lblHealthText:Hide();
-		edHealthText:Hide();
-		lblHealthInt:Hide();
-		edHealthInt:Hide();
-		lblHealthIntSeconds:Hide();
-	end
+    if ( chkWarningHealth:GetChecked() ) then
+        edHealthThresh:Show();
+        lblHealthThresh:Show();
+        lblHealth:Show();
+        chkWarningHealthCombat:Show();
+        chkWarningHealthChecks:Show();
+        lblHealthText:Show();
+        edHealthText:Show();
+        lblHealthInt:Show();
+        edHealthInt:Show();
+        lblHealthIntSeconds:Show();
+    else
+        edHealthThresh:Hide();
+        lblHealthThresh:Hide();
+        lblHealth:Hide();
+        chkWarningHealthCombat:Hide();
+        chkWarningHealthChecks:Hide();
+        lblHealthText:Hide();
+        edHealthText:Hide();
+        lblHealthInt:Hide();
+        edHealthInt:Hide();
+        lblHealthIntSeconds:Hide();
+    end
 end
 
 function chkWarningOom_OnClick()
-	if ( chkWarningOom:GetChecked() ) then
-		lblOomThresh:Show();
-		edOomThresh:Show();
-		lblOomThreshPerc:Show();
-		lblOomInt:Show();
-		edOomInt:Show();
-		lblOomIntSeconds:Show();
-		edOomText:Show();
-		chkAnnounceOomToParty:Show();
-		chkAnnounceOomToInstance:Show();
-		chkAnnounceOomToRaid:Show();
-	else
-		lblOomThresh:Hide();
-		edOomThresh:Hide();
-		lblOomThreshPerc:Hide();
-		lblOomInt:Hide();
-		edOomInt:Hide();
-		lblOomIntSeconds:Hide();
-		edOomText:Hide();
-		chkAnnounceOomToParty:Hide();
-		chkAnnounceOomToInstance:Hide();
-		chkAnnounceOomToRaid:Hide();
-	end
+    if ( chkWarningOom:GetChecked() ) then
+        lblOomThresh:Show();
+        edOomThresh:Show();
+        lblOomThreshPerc:Show();
+        lblOomInt:Show();
+        edOomInt:Show();
+        lblOomIntSeconds:Show();
+        edOomText:Show();
+        chkAnnounceOomToParty:Show();
+        chkAnnounceOomToInstance:Show();
+        chkAnnounceOomToRaid:Show();
+    else
+        lblOomThresh:Hide();
+        edOomThresh:Hide();
+        lblOomThreshPerc:Hide();
+        lblOomInt:Hide();
+        edOomInt:Hide();
+        lblOomIntSeconds:Hide();
+        edOomText:Hide();
+        chkAnnounceOomToParty:Hide();
+        chkAnnounceOomToInstance:Hide();
+        chkAnnounceOomToRaid:Hide();
+    end
 end
 
 function btnSave_OnClick()
-	ManaWarningSettings_SaveSettingsIntoVars();
-	ManaWarningSettings_SaveToSavedVariables();
+    ManaWarningSettings_SaveSettingsIntoVars();
+    ManaWarningSettings_SaveToSavedVariables();
 end
 
 function btnCancel_OnClick()
-	ManaWarningSettings_LoadFromSavedVariables();
+    ManaWarningSettings_LoadFromSavedVariables();
 end
 
 function ManaWarningSettings_InitDefaults()
-	bManaWarningActive = true;
-	sManaWarningMsg = "Need Mana";
-	iManaWarningTmr = 20;
-	iManaTreshhold = 50.0;
-	bManaDoPotsCheck = true;
-	bManaDoCombatCheck = true;
+    bManaWarningActive = true;
+    sManaWarningMsg = "Need Mana";
+    iManaWarningTmr = 20;
+    iManaTreshhold = 50.0;
+    bManaDoPotsCheck = true;
+    bManaDoCombatCheck = true;
 
-	bManaOomStatusAnnounce = true;
-	iOomPercentageTreshhold = 10.0;
-	iOomWarningTmr = 60;
+    bManaOomStatusAnnounce = true;
+    iOomPercentageTreshhold = 10.0;
+    iOomWarningTmr = 60;
 
-	bHealthWarningActive = true;
-	sHealthWarningMsg = "Need Healing";
-	iHealthWarningTmr = 20;
-	iHealthTreshhold = 50.0;
-	bHealthDoPotsCheck = true;
-	bHealthDoCombatCheck = true;
-	
-	iManaFloodProtection = 99;
-	iCurrentManaFloodCount = 0;
-	
-	bOnlyCheckPotionsInRaid = false;
-	bAnnounceOomToParty = false;
-	bAnnounceOomToInstance = false;
-	
-	sOomMsg = "OOM!";
+    bHealthWarningActive = true;
+    sHealthWarningMsg = "Need Healing";
+    iHealthWarningTmr = 20;
+    iHealthTreshhold = 50.0;
+    bHealthDoPotsCheck = true;
+    bHealthDoCombatCheck = true;
+    
+    iManaFloodProtection = 99;
+    iCurrentManaFloodCount = 0;
+    
+    bOnlyCheckPotionsInRaid = false;
+    bAnnounceOomToParty = false;
+    bAnnounceOomToInstance = false;
+    
+    sOomMsg = "OOM!";
 
-	bAnnounceOomToRaid = true;
+    bAnnounceOomToRaid = true;
 end
 
 function ManaWarningSettings_LoadFromVars()
-	chkWarningMana:SetChecked( bManaWarningActive );
-	edManaThresh:SetNumber( iManaTreshhold );	
-	edManaText:SetText( sManaWarningMsg );
-	edManaInt:SetNumber( iManaWarningTmr );
-	chkWarningManaCombat:SetChecked( bManaDoCombatCheck );
-	chkWarningManaChecks:SetChecked( bManaDoPotsCheck );
+    chkWarningMana:SetChecked( bManaWarningActive );
+    edManaThresh:SetNumber( iManaTreshhold );   
+    edManaText:SetText( sManaWarningMsg );
+    edManaInt:SetNumber( iManaWarningTmr );
+    chkWarningManaCombat:SetChecked( bManaDoCombatCheck );
+    chkWarningManaChecks:SetChecked( bManaDoPotsCheck );
 
-	chkWarningHealth:SetChecked( bHealthWarningActive );
-	edHealthThresh:SetNumber( iHealthTreshhold );
-	edHealthText:SetText( sHealthWarningMsg );
-	edHealthInt:SetNumber( iHealthWarningTmr );
-	chkWarningHealthCombat:SetChecked( bHealthDoCombatCheck );
-	chkWarningHealthChecks:SetChecked( bHealthDoPotsCheck );
+    chkWarningHealth:SetChecked( bHealthWarningActive );
+    edHealthThresh:SetNumber( iHealthTreshhold );
+    edHealthText:SetText( sHealthWarningMsg );
+    edHealthInt:SetNumber( iHealthWarningTmr );
+    chkWarningHealthCombat:SetChecked( bHealthDoCombatCheck );
+    chkWarningHealthChecks:SetChecked( bHealthDoPotsCheck );
 
-	chkWarningOom:SetChecked( bManaOomStatusAnnounce );
-	edOomThresh:SetNumber( iOomPercentageTreshhold );
-	edOomInt:SetNumber( iOomWarningTmr );
-	
-	edOomText:SetText( sOomMsg );
-	
-	edManaFloodProtection:SetNumber( iManaFloodProtection );
-	chkOnlyCheckPotionsInRaid:SetChecked( bOnlyCheckPotionsInRaid );
+    chkWarningOom:SetChecked( bManaOomStatusAnnounce );
+    edOomThresh:SetNumber( iOomPercentageTreshhold );
+    edOomInt:SetNumber( iOomWarningTmr );
+    
+    edOomText:SetText( sOomMsg );
+    
+    edManaFloodProtection:SetNumber( iManaFloodProtection );
+    chkOnlyCheckPotionsInRaid:SetChecked( bOnlyCheckPotionsInRaid );
 
-	chkAnnounceOomToParty:SetChecked( bAnnounceOomToParty );
-	chkAnnounceOomToParty:SetChecked( bAnnounceOomToInstance );
-	chkAnnounceOomToRaid:SetChecked( bAnnounceOomToRaid );
+    chkAnnounceOomToParty:SetChecked( bAnnounceOomToParty );
+    chkAnnounceOomToParty:SetChecked( bAnnounceOomToInstance );
+    chkAnnounceOomToRaid:SetChecked( bAnnounceOomToRaid );
 end
 
 function ManaWarningSettings_SaveSettingsIntoVars()
-	bManaWarningActive		= chkWarningMana:GetChecked();
-	iManaTreshhold			= edManaThresh:GetNumber();	
-	sManaWarningMsg			= edManaText:GetText();
-	iManaWarningTmr			= edManaInt:GetNumber();
-	bManaDoCombatCheck		= chkWarningManaCombat:GetChecked();
-	bManaDoPotsCheck		= chkWarningManaChecks:GetChecked();
+    bManaWarningActive      = chkWarningMana:GetChecked();
+    iManaTreshhold          = edManaThresh:GetNumber(); 
+    sManaWarningMsg         = edManaText:GetText();
+    iManaWarningTmr         = edManaInt:GetNumber();
+    bManaDoCombatCheck      = chkWarningManaCombat:GetChecked();
+    bManaDoPotsCheck        = chkWarningManaChecks:GetChecked();
 
-	bHealthWarningActive	= chkWarningHealth:GetChecked();
-	iHealthTreshhold		= edHealthThresh:GetNumber();
-	sHealthWarningMsg		= edHealthText:GetText();
-	iHealthWarningTmr		= edHealthInt:GetNumber();
-	bHealthDoCombatCheck	= chkWarningHealthCombat:GetChecked();
-	bHealthDoPotsCheck		= chkWarningHealthChecks:GetChecked();
+    bHealthWarningActive    = chkWarningHealth:GetChecked();
+    iHealthTreshhold        = edHealthThresh:GetNumber();
+    sHealthWarningMsg       = edHealthText:GetText();
+    iHealthWarningTmr       = edHealthInt:GetNumber();
+    bHealthDoCombatCheck    = chkWarningHealthCombat:GetChecked();
+    bHealthDoPotsCheck      = chkWarningHealthChecks:GetChecked();
 
-	bManaOomStatusAnnounce	= chkWarningOom:GetChecked();
-	iOomPercentageTreshhold = edOomThresh:GetNumber();
-	iOomWarningTmr			= edOomInt:GetNumber();
-	
-	sOomMsg					= edOomText:GetText();
-	
-	iManaFloodProtection    = edManaFloodProtection:GetNumber();
-	bOnlyCheckPotionsInRaid = chkOnlyCheckPotionsInRaid:GetChecked();
+    bManaOomStatusAnnounce  = chkWarningOom:GetChecked();
+    iOomPercentageTreshhold = edOomThresh:GetNumber();
+    iOomWarningTmr          = edOomInt:GetNumber();
+    
+    sOomMsg                 = edOomText:GetText();
+    
+    iManaFloodProtection    = edManaFloodProtection:GetNumber();
+    bOnlyCheckPotionsInRaid = chkOnlyCheckPotionsInRaid:GetChecked();
 
-	bAnnounceOomToParty     = chkAnnounceOomToParty:GetChecked();
-	bAnnounceOomToInstance  = chkAnnounceOomToInstance:GetChecked();
-	bAnnounceOomToRaid		= chkAnnounceOomToRaid:GetChecked();
+    bAnnounceOomToParty     = chkAnnounceOomToParty:GetChecked();
+    bAnnounceOomToInstance  = chkAnnounceOomToInstance:GetChecked();
+    bAnnounceOomToRaid      = chkAnnounceOomToRaid:GetChecked();
 end
 
 function ManaWarningSettings_Refresh()
-	chkWarningManaText:SetText( "Mana warning" );
-	chkWarningHealthText:SetText( "Health warning" );
-	chkWarningOomText:SetText( "OOM warning" );
-	chkWarningManaCombatText:SetText( "Only when in combat" );
-	chkWarningManaChecksText:SetText( "Check cooldowns" );
-	chkWarningHealthCombatText:SetText( "Only when in combat" );
-	chkWarningHealthChecksText:SetText( "Check cooldowns" );
-	chkOnlyCheckPotionsInRaidText:SetText( "Only check potions in raid" );
-	chkAnnounceOomToPartyText:SetText( "Announce OOM to party" );
-	chkAnnounceOomToInstanceText:SetText( "Announce OOM to instance" );
-	chkAnnounceOomToRaidText:SetText( "Announce OOM to raid" );
-	
-	ManaWarningSettings_LoadFromVars();
-	
-	chkWarningMana_OnClick();
-	chkWarningHealth_OnClick();
-	chkWarningOom_OnClick();
+    chkWarningManaText:SetText( "Mana warning" );
+    chkWarningHealthText:SetText( "Health warning" );
+    chkWarningOomText:SetText( "OOM warning" );
+    chkWarningManaCombatText:SetText( "Only when in combat" );
+    chkWarningManaChecksText:SetText( "Check cooldowns" );
+    chkWarningHealthCombatText:SetText( "Only when in combat" );
+    chkWarningHealthChecksText:SetText( "Check cooldowns" );
+    chkOnlyCheckPotionsInRaidText:SetText( "Only check potions in raid" );
+    chkAnnounceOomToPartyText:SetText( "Announce OOM to party" );
+    chkAnnounceOomToInstanceText:SetText( "Announce OOM to instance" );
+    chkAnnounceOomToRaidText:SetText( "Announce OOM to raid" );
+    
+    ManaWarningSettings_LoadFromVars();
+    
+    chkWarningMana_OnClick();
+    chkWarningHealth_OnClick();
+    chkWarningOom_OnClick();
 end
 
 function ManaWarningSettings_LoadFromSavedVariables()
-	if ( #(ManaWarning_Settings) >= 15 ) then
-		bManaWarningActive = ManaWarning_Settings[1];
-		iManaTreshhold = ManaWarning_Settings[2];
-		sManaWarningMsg = ManaWarning_Settings[3];
-		iManaWarningTmr = ManaWarning_Settings[4];
-		bManaDoCombatCheck = ManaWarning_Settings[5];
-		bManaDoPotsCheck = ManaWarning_Settings[6];
-		bHealthWarningActive = ManaWarning_Settings[7];
-		iHealthTreshhold = ManaWarning_Settings[8];
-		sHealthWarningMsg = ManaWarning_Settings[9];
-		iHealthWarningTmr = ManaWarning_Settings[10];
-		bHealthDoCombatCheck = ManaWarning_Settings[11];
-		bHealthDoPotsCheck = ManaWarning_Settings[12];
-		bManaOomStatusAnnounce = ManaWarning_Settings[13];
-		iOomPercentageTreshhold = ManaWarning_Settings[14];
-		iOomWarningTmr = ManaWarning_Settings[15];
-		
-		-- dirty hack for old situation with mp instead of percentages
-		if iManaTreshhold > 100.0 then
-			iManaTreshhold = 50.0;
-		end
-		if iHealthTreshhold > 100.0 then
-			iHealthTreshhold = 50.0;
-		end
-		
-		if #(ManaWarning_Settings) >= 16 then
-			sOomMsg = ManaWarning_Settings[16];
-		end;
-		
-		bDisableInPvp = ManaWarning_Settings[17];
+    if ( #(ManaWarning_Settings) >= 15 ) then
+        bManaWarningActive = ManaWarning_Settings[1];
+        iManaTreshhold = ManaWarning_Settings[2];
+        sManaWarningMsg = ManaWarning_Settings[3];
+        iManaWarningTmr = ManaWarning_Settings[4];
+        bManaDoCombatCheck = ManaWarning_Settings[5];
+        bManaDoPotsCheck = ManaWarning_Settings[6];
+        bHealthWarningActive = ManaWarning_Settings[7];
+        iHealthTreshhold = ManaWarning_Settings[8];
+        sHealthWarningMsg = ManaWarning_Settings[9];
+        iHealthWarningTmr = ManaWarning_Settings[10];
+        bHealthDoCombatCheck = ManaWarning_Settings[11];
+        bHealthDoPotsCheck = ManaWarning_Settings[12];
+        bManaOomStatusAnnounce = ManaWarning_Settings[13];
+        iOomPercentageTreshhold = ManaWarning_Settings[14];
+        iOomWarningTmr = ManaWarning_Settings[15];
+        
+        -- dirty hack for old situation with mp instead of percentages
+        if iManaTreshhold > 100.0 then
+            iManaTreshhold = 50.0;
+        end
+        if iHealthTreshhold > 100.0 then
+            iHealthTreshhold = 50.0;
+        end
+        
+        if #(ManaWarning_Settings) >= 16 then
+            sOomMsg = ManaWarning_Settings[16];
+        end;
+        
+        bDisableInPvp = ManaWarning_Settings[17];
 
-		if #(ManaWarning_Settings) >= 18 then
-			iManaFloodProtection = ManaWarning_Settings[18];
-		end
-		
-		bOnlyCheckPotionsInRaid = ManaWarning_Settings[19];
-		bAnnounceOomToParty = ManaWarning_Settings[20];
-		bAnnounceOomToRaid = ManaWarning_Settings[21];
+        if #(ManaWarning_Settings) >= 18 then
+            iManaFloodProtection = ManaWarning_Settings[18];
+        end
+        
+        bOnlyCheckPotionsInRaid = ManaWarning_Settings[19];
+        bAnnounceOomToParty = ManaWarning_Settings[20];
+        bAnnounceOomToRaid = ManaWarning_Settings[21];
 
-		if ManaWarning_Settings[22] == -1 then
-			-- old, default to false
-		else
-			bAnnounceOomToInstance = ManaWarning_Settings[22];
-		end
-	else
-		ManaWarningSettings_InitDefaults();
-		ManaWarningSettings_SaveToSavedVariables();
-	end
-	
-	
+        if ManaWarning_Settings[22] == -1 then
+            -- old, default to false
+        else
+            bAnnounceOomToInstance = ManaWarning_Settings[22];
+        end
+    else
+        ManaWarningSettings_InitDefaults();
+        ManaWarningSettings_SaveToSavedVariables();
+    end
+    
+    
 end
 
 function ManaWarningSettings_SaveToSavedVariables()
-	ManaWarning_Settings = {};
-	ManaWarning_Settings[1] = bManaWarningActive;
-	ManaWarning_Settings[2] = iManaTreshhold;	
-	ManaWarning_Settings[3] = sManaWarningMsg;
-	ManaWarning_Settings[4] = iManaWarningTmr;
-	ManaWarning_Settings[5] = bManaDoCombatCheck;
-	ManaWarning_Settings[6] = bManaDoPotsCheck;
-	ManaWarning_Settings[7] = bHealthWarningActive;
-	ManaWarning_Settings[8] = iHealthTreshhold;
-	ManaWarning_Settings[9] = sHealthWarningMsg;
-	ManaWarning_Settings[10] = iHealthWarningTmr;
-	ManaWarning_Settings[11] = bHealthDoCombatCheck;
-	ManaWarning_Settings[12] = bHealthDoPotsCheck;
-	ManaWarning_Settings[13] = bManaOomStatusAnnounce;
-	ManaWarning_Settings[14] = iOomPercentageTreshhold;
-	ManaWarning_Settings[15] = iOomWarningTmr;
-	ManaWarning_Settings[16] = sOomMsg;
-	ManaWarning_Settings[17] = bDisableInPvp;
-	ManaWarning_Settings[18] = iManaFloodProtection;
-	ManaWarning_Settings[19] = bOnlyCheckPotionsInRaid;
-	ManaWarning_Settings[20] = bAnnounceOomToParty;
-	ManaWarning_Settings[21] = bAnnounceOomToRaid;
-	ManaWarning_Settings[22] = bAnnounceOomToInstance;
+    ManaWarning_Settings = {};
+    ManaWarning_Settings[1] = bManaWarningActive;
+    ManaWarning_Settings[2] = iManaTreshhold;   
+    ManaWarning_Settings[3] = sManaWarningMsg;
+    ManaWarning_Settings[4] = iManaWarningTmr;
+    ManaWarning_Settings[5] = bManaDoCombatCheck;
+    ManaWarning_Settings[6] = bManaDoPotsCheck;
+    ManaWarning_Settings[7] = bHealthWarningActive;
+    ManaWarning_Settings[8] = iHealthTreshhold;
+    ManaWarning_Settings[9] = sHealthWarningMsg;
+    ManaWarning_Settings[10] = iHealthWarningTmr;
+    ManaWarning_Settings[11] = bHealthDoCombatCheck;
+    ManaWarning_Settings[12] = bHealthDoPotsCheck;
+    ManaWarning_Settings[13] = bManaOomStatusAnnounce;
+    ManaWarning_Settings[14] = iOomPercentageTreshhold;
+    ManaWarning_Settings[15] = iOomWarningTmr;
+    ManaWarning_Settings[16] = sOomMsg;
+    ManaWarning_Settings[17] = bDisableInPvp;
+    ManaWarning_Settings[18] = iManaFloodProtection;
+    ManaWarning_Settings[19] = bOnlyCheckPotionsInRaid;
+    ManaWarning_Settings[20] = bAnnounceOomToParty;
+    ManaWarning_Settings[21] = bAnnounceOomToRaid;
+    ManaWarning_Settings[22] = bAnnounceOomToInstance;
 end
 
 function btnRestoreDefaults_OnClick()
-	ManaWarningSettings_InitDefaults();
-	ManaWarningSettings_LoadFromVars();
-	
-	chkWarningMana_OnClick();
-	chkWarningHealth_OnClick();
-	chkWarningOom_OnClick();
+    ManaWarningSettings_InitDefaults();
+    ManaWarningSettings_LoadFromVars();
+    
+    chkWarningMana_OnClick();
+    chkWarningHealth_OnClick();
+    chkWarningOom_OnClick();
 end
 
 -------------------------------------------------
@@ -403,144 +403,144 @@ bDebug = false;
 
 -- Mage shared cooldown gems
 MANA_RESTORING_STUFF_A = {
-	--[36799] = "Mana Gem",
-	--[33312] = "Mana Sapphire",
-	--[22044] = "Mana Emerald",
-	--[8008] = "Mana Sapphire",
-	--[8007] = "Mana Citrine",
-	--[5513] = "Mana Jade",
-	--[5514] = "Mana Agate",
+    --[36799] = "Mana Gem",
+    --[33312] = "Mana Sapphire",
+    --[22044] = "Mana Emerald",
+    --[8008] = "Mana Sapphire",
+    --[8007] = "Mana Citrine",
+    --[5513] = "Mana Jade",
+    --[5514] = "Mana Agate",
 };
 
 
 -- Shared cooldown mana pots
 MANA_RESTORING_STUFF_B = {
-	[109222] = "Draenic Mana Potion",
-	[109221] = "Draenic Channeled Mana Potion",
-	[76098] = "Master Mana Potion",
-	[57192] = "Mythical Mana Potion",
-	[57193] = "Mighty Rejuvenation Potion",
-	[57194] = "Potion of Concentration",
-	[40077] = "Crazy Alchemist's Potion",
-	[42545] = "Runic Mana Injector",
-	[33448] = "Runic Mana Potion",
-	[43570] = "Endless Mana Potion",
-	[22832] = "Super Mana Potion",
-	[33093] = "Mana Potion Injector",
-	[40067] = "Icy Mana Potion",
-	[43530] = "Argent Mana Potion",
-	[34440] = "Mad Alchemist's Potion",
-	[22850] = "Super Rejuvenation Potion",
-	[31677] = "Fel Mana Potion",
-	[28101] = "Unstable Mana Potion",
-	[13444] = "Major Mana Potion",
-	[33935] = "Crystal Mana Potion",
-	[32948] = "Auchenai Mana Potion",
+    [109222] = "Draenic Mana Potion",
+    [109221] = "Draenic Channeled Mana Potion",
+    [76098] = "Master Mana Potion",
+    [57192] = "Mythical Mana Potion",
+    [57193] = "Mighty Rejuvenation Potion",
+    [57194] = "Potion of Concentration",
+    [40077] = "Crazy Alchemist's Potion",
+    [42545] = "Runic Mana Injector",
+    [33448] = "Runic Mana Potion",
+    [43570] = "Endless Mana Potion",
+    [22832] = "Super Mana Potion",
+    [33093] = "Mana Potion Injector",
+    [40067] = "Icy Mana Potion",
+    [43530] = "Argent Mana Potion",
+    [34440] = "Mad Alchemist's Potion",
+    [22850] = "Super Rejuvenation Potion",
+    [31677] = "Fel Mana Potion",
+    [28101] = "Unstable Mana Potion",
+    [13444] = "Major Mana Potion",
+    [33935] = "Crystal Mana Potion",
+    [32948] = "Auchenai Mana Potion",
 };
 
 -- health stuff; no cooldown, just disapears when used
 HEALTH_RESTORING_STUFF_A = {
-	[22105] = "Master Healthstone",
-	[22104] = "Master Healthstone",
-	[22103] = "Master Healthstone",
-	[32578] = "Charged Crystal Focus",
+    [22105] = "Master Healthstone",
+    [22104] = "Master Healthstone",
+    [22103] = "Master Healthstone",
+    [32578] = "Charged Crystal Focus",
 };
 
 -- Shared cooldown mana pots
 HEALTH_RESTORING_STUFF_B = {
-	[109223] = "Healing Tonic",
-	[80040] = "Endless Master Healing Potion",
-	[76097] = "Master Healing Potion",
-	[57191] = "Mythical Healing Potion",
-	[57193] = "Mighty Rejuvenation Potion",
-	[40077] = "Crazy Alchemist's Potion",
-	[41166] = "Runic Healing Injector",
-	[33447] = "Runic Healing Potion",
-	[43569] = "Endless Healing Potion",
-	[22829] = "Super Healing Potion",
-	[33092] = "Healing Potion Injector",
-	[43531] = "Argent Healing Potion",
-	[34440] = "Mad Alchemist's Potion",
-	[22850] = "Super Rejuvenation Potion",
-	[31676] = "Fel Regeneration Potion",
-	[13446] = "Major Healing Potion",
-	[33934] = "Crystal Healing Potion",
-	[32947] = "Auchenai Healing Potion",
+    [109223] = "Healing Tonic",
+    [80040] = "Endless Master Healing Potion",
+    [76097] = "Master Healing Potion",
+    [57191] = "Mythical Healing Potion",
+    [57193] = "Mighty Rejuvenation Potion",
+    [40077] = "Crazy Alchemist's Potion",
+    [41166] = "Runic Healing Injector",
+    [33447] = "Runic Healing Potion",
+    [43569] = "Endless Healing Potion",
+    [22829] = "Super Healing Potion",
+    [33092] = "Healing Potion Injector",
+    [43531] = "Argent Healing Potion",
+    [34440] = "Mad Alchemist's Potion",
+    [22850] = "Super Rejuvenation Potion",
+    [31676] = "Fel Regeneration Potion",
+    [13446] = "Major Healing Potion",
+    [33934] = "Crystal Healing Potion",
+    [32947] = "Auchenai Healing Potion",
 };
 
 
 
 -- OnLoad function
 function ManaWarning_OnLoad(obj)
-	ManaWarningSettings:Hide();
+    ManaWarningSettings:Hide();
 
-	obj:RegisterEvent( CONST_VARSLOADED );
-	obj:RegisterEvent( CONST_POWERUPDATE );
-	obj:RegisterEvent( CONST_HEALTHUPDATE );
-	obj:RegisterEvent( CONST_SPEC_CHANGE );
+    obj:RegisterEvent( CONST_VARSLOADED );
+    obj:RegisterEvent( CONST_POWERUPDATE );
+    obj:RegisterEvent( CONST_HEALTHUPDATE );
+    obj:RegisterEvent( CONST_SPEC_CHANGE );
 
-	obj.name = "ManaWarning";
+    obj.name = "ManaWarning";
         obj.okay = function (obj) btnSave_OnClick(); end;
         obj.cancel = function (obj) btnCancel_OnClick(); end;
-	obj.default = function (obj) btnRestoreDefaults_OnClick(); end;
-	obj.refresh = function (obj) ManaWarningSettings_Refresh(); end;
+    obj.default = function (obj) btnRestoreDefaults_OnClick(); end;
+    obj.refresh = function (obj) ManaWarningSettings_Refresh(); end;
 
-	InterfaceOptions_AddCategory(obj);
-	
-	sCurrentSpecName = GetCurrentTalentSpec();
+    InterfaceOptions_AddCategory(obj);
+    
+    sCurrentSpecName = GetCurrentTalentSpec();
 end
 
 function ManaWarning_PlayerIsInPvp()
-	if UnitIsPVP(CONST_PLAYER) then
-		return true;
-	end
-	
-	return false;
+    if UnitIsPVP(CONST_PLAYER) then
+        return true;
+    end
+    
+    return false;
 end
 
 -- OnEvent
 function ManaWarning_OnEvent( obj, event, ... )
    ManaWarning_CheckTasks();
-	
+    
    if ( event == CONST_VARSLOADED ) then
       ManaWarningSettings_LoadFromSavedVariables();
 
       bReady = true;
    elseif ( event == CONST_POWERUPDATE ) then
-		bDoCheck = true;
-		if bDisableInPvp then
-			bDoCheck = not ManaWarning_PlayerIsInPvp();
-		end
+        bDoCheck = true;
+        if bDisableInPvp then
+            bDoCheck = not ManaWarning_PlayerIsInPvp();
+        end
    
-		if bDoCheck then
-			local unitId, resource = ...;
-			if ( bManaWarningActive or bManaOomStatusAnnounce ) then
-				if (resource == "MANA") then
-					--  or (resource == "FOCUS") ??
-					-- apparently you get updates for everyone in your party/raid, so check if we get a "player" update
-					if ( unitId == CONST_PLAYER ) then
-						ManaWarning_PlayerManaUpdate();
-					end
-				end
-			end
-		end
+        if bDoCheck then
+            local unitId, resource = ...;
+            if ( bManaWarningActive or bManaOomStatusAnnounce ) then
+                if (resource == "MANA") then
+                    --  or (resource == "FOCUS") ??
+                    -- apparently you get updates for everyone in your party/raid, so check if we get a "player" update
+                    if ( unitId == CONST_PLAYER ) then
+                        ManaWarning_PlayerManaUpdate();
+                    end
+                end
+            end
+        end
    elseif ( event == CONST_HEALTHUPDATE ) then
-		bDoCheck = true;
-		if bDisableInPvp then
-			bDoCheck = not ManaWarning_PlayerIsInPvp();
-		end
+        bDoCheck = true;
+        if bDisableInPvp then
+            bDoCheck = not ManaWarning_PlayerIsInPvp();
+        end
    
-		if bDoCheck then
-			local unitId = ...;
-			if ( bHealthWarningActive ) then
-				if ( unitId == CONST_PLAYER ) then
-					ManaWarning_PlayerHealthUpdate();
-				end
-			end
-		end
-	elseif ( event == CONST_SPEC_CHANGE ) then
-		ManaWarning_PlayerSpecChange();
-	end
+        if bDoCheck then
+            local unitId = ...;
+            if ( bHealthWarningActive ) then
+                if ( unitId == CONST_PLAYER ) then
+                    ManaWarning_PlayerHealthUpdate();
+                end
+            end
+        end
+    elseif ( event == CONST_SPEC_CHANGE ) then
+        ManaWarning_PlayerSpecChange();
+    end
 end
 
 function getLowestCDInArrayOfItems( iHighestCD, array )
@@ -548,7 +548,7 @@ function getLowestCDInArrayOfItems( iHighestCD, array )
 
    for itemId,sName in pairs(array) do
       ic = GetItemCount( itemId );
-	
+    
       if ( ic > 0 ) then
          pot_start, pot_dur, pot_en = GetItemCooldown( itemId );
          remaining_time = 0;
@@ -578,36 +578,36 @@ function getSpellCD( sName )
 
    usable, nomana = IsUsableSpell( sName );
    if ( usable ) then
-	   spell_start, spell_dur, spell_en = GetSpellCooldown( sName );
-	   if ( spell_start ) then
-			if spell_dur < 1.5 then	-- ignore gcd
-				return 0;
-			else
-			   if ( spell_start > 0 ) then
-				  remaining_time = floor( spell_dur - (current_time - spell_start) );
+       spell_start, spell_dur, spell_en = GetSpellCooldown( sName );
+       if ( spell_start ) then
+            if spell_dur < 1.5 then -- ignore gcd
+                return 0;
+            else
+               if ( spell_start > 0 ) then
+                  remaining_time = floor( spell_dur - (current_time - spell_start) );
 
-				  return remaining_time;
-			   end
-			end
-	   end
-	   
-	   return 0;
-	end
-	
-	return 600;
+                  return remaining_time;
+               end
+            end
+       end
+       
+       return 0;
+    end
+    
+    return 600;
 end
 
 --function HasManaTideTotemOut()
---	for i = 1, 40 do
---		local buff = UnitBuff(CONST_PLAYER, i);
---		if buff then
---			if (buff == "Mana Tide Totem") then
---				return true;
---			end
---		end
---	end
---	
---	return false;
+--  for i = 1, 40 do
+--      local buff = UnitBuff(CONST_PLAYER, i);
+--      if buff then
+--          if (buff == "Mana Tide Totem") then
+--              return true;
+--          end
+--      end
+--  end
+--  
+--  return false;
 --end
 
 -- Are all Mana restoring items on cooldown?
@@ -652,7 +652,7 @@ function ManaWarning_TimeManaOnCooldown()
          sPotionHint = "Mindbender";
          return 0;
       end
-	 
+     
       iSpCd = getSpellCD( "Shadowfiend" );
 
       if ( iSpCd < iLowestRemainingTime ) then
@@ -665,11 +665,11 @@ function ManaWarning_TimeManaOnCooldown()
 
 --      iSpCd = getSpellCD( "Hymn of Hope" );
 --      if ( iSpCd < iLowestRemainingTime ) then
---				iLowestRemainingTime = iSpCd;
+--              iLowestRemainingTime = iSpCd;
 --      end
 --      if ( iSpCd == 0 ) then
---				sPotionHint = "Hymn of Hope";
---				return 0;
+--              sPotionHint = "Hymn of Hope";
+--              return 0;
 --      end
    elseif ( enClass == "SHAMAN" ) then
 --      iSpCd = getSpellCD("Mana Tide Totem")
@@ -688,10 +688,10 @@ function ManaWarning_TimeManaOnCooldown()
    end
 
    if bCheckPots then
-	   iLowestRemainingTime = getLowestCDInArrayOfItems( iLowestRemainingTime, MANA_RESTORING_STUFF_B );
-	   if ( iLowestRemainingTime == 0 ) then
-		  return 0;
-	   end
+       iLowestRemainingTime = getLowestCDInArrayOfItems( iLowestRemainingTime, MANA_RESTORING_STUFF_B );
+       if ( iLowestRemainingTime == 0 ) then
+          return 0;
+       end
    end
 
    return iLowestRemainingTime;
@@ -770,69 +770,69 @@ end
 function ManaWarning_PlayerManaUpdate()
    -- if mana user atm
    if ( UnitPowerType( CONST_PLAYER ) == 0 ) then
-	   maxmana = UnitManaMax( CONST_PLAYER );
-	   currentmana = UnitMana( CONST_PLAYER );
-	   
-	   bMayGiveWarning = true;
-	   if ( bManaDoCombatCheck ) then
-		  -- don't warn if we're not in combat
-		  if ( UnitAffectingCombat( CONST_PLAYER ) == nil ) then
-			 bMayGiveWarning = false;
-		  end
-	   end
+       maxmana = UnitManaMax( CONST_PLAYER );
+       currentmana = UnitMana( CONST_PLAYER );
+       
+       bMayGiveWarning = true;
+       if ( bManaDoCombatCheck ) then
+          -- don't warn if we're not in combat
+          if ( UnitAffectingCombat( CONST_PLAYER ) == nil ) then
+             bMayGiveWarning = false;
+          end
+       end
 
-	   iLowestRemainingTime = 0;
-	   if ( bManaDoPotsCheck ) then
+       iLowestRemainingTime = 0;
+       if ( bManaDoPotsCheck ) then
           sPotionHint = "";
-		  iLowestRemainingTime = ManaWarning_TimeManaOnCooldown();
-	   end
+          iLowestRemainingTime = ManaWarning_TimeManaOnCooldown();
+       end
 
-	   if ( bMayGiveWarning and bManaOomStatusAnnounce and not bManaOOMWarningGiven ) then
-		  oom_tresh = maxmana / 100.0 * iOomPercentageTreshhold;
-		  if ( currentmana < oom_tresh ) then
-			 bManaOOMWarningGiven = true;
+       if ( bMayGiveWarning and bManaOomStatusAnnounce and not bManaOOMWarningGiven ) then
+          oom_tresh = maxmana / 100.0 * iOomPercentageTreshhold;
+          if ( currentmana < oom_tresh ) then
+             bManaOOMWarningGiven = true;
 
-			 if ( bManaDoPotsCheck ) then
-			    ManaWarning_MessagePartyRaid( sOomMsg.." (CD's "..iLowestRemainingTime.."s)" );
-			 else
-				ManaWarning_MessagePartyRaid( sOomMsg );
+             if ( bManaDoPotsCheck ) then
+                ManaWarning_MessagePartyRaid( sOomMsg.." (CD's "..iLowestRemainingTime.."s)" );
+             else
+                ManaWarning_MessagePartyRaid( sOomMsg );
              end
              ManaWarning_Schedule( iOomWarningTmr, ManaWarning_ResetManaOOMWarningGiven );
-		  end
-	   end
+          end
+       end
 
-	   if ( bManaWarningActive and bMayGiveWarning and not bManaWarningGiven ) then
-		  mana_tresh = maxmana / 100.0 * iManaTreshhold;
-		  if ( currentmana < mana_tresh ) then
-			 bManaWarningGiven = true;
+       if ( bManaWarningActive and bMayGiveWarning and not bManaWarningGiven ) then
+          mana_tresh = maxmana / 100.0 * iManaTreshhold;
+          if ( currentmana < mana_tresh ) then
+             bManaWarningGiven = true;
 
-			 if ( iLowestRemainingTime == 0 ) then
-				iLowestRemainingTime = iManaWarningTmr;
-			 end
+             if ( iLowestRemainingTime == 0 ) then
+                iLowestRemainingTime = iManaWarningTmr;
+             end
 
              ManaWarning_Schedule( iLowestRemainingTime, ManaWarning_ResetManaWarningGiven );
 
              if iCurrentManaFloodCount < iManaFloodProtection then
-				iCurrentManaFloodCount = iCurrentManaFloodCount + 1;
+                iCurrentManaFloodCount = iCurrentManaFloodCount + 1;
 
-				if ( bManaDoPotsCheck ) then
-					if not ( sPotionHint == "" ) then
-						ManaWarning_MessageSelf( sManaWarningMsg .. " (Try using " .. sPotionHint .. ")");
-					end
-				else
-					ManaWarning_MessageSelf( sManaWarningMsg );
-		        end
-		     end
-		  else
-			 -- reset flood protection once you're above the treshhold
+                if ( bManaDoPotsCheck ) then
+                    if not ( sPotionHint == "" ) then
+                        ManaWarning_MessageSelf( sManaWarningMsg .. " (Try using " .. sPotionHint .. ")");
+                    end
+                else
+                    ManaWarning_MessageSelf( sManaWarningMsg );
+                end
+             end
+          else
+             -- reset flood protection once you're above the treshhold
              iCurrentManaFloodCount = 0;
 
-			-- class specific stuff once no more below treshhold
-			--locClass, enClass = UnitClass( CONST_PLAYER );
-			--if ( enClass == "HUNTER" ) then
-			--end
-		  end
-	   end
+            -- class specific stuff once no more below treshhold
+            --locClass, enClass = UnitClass( CONST_PLAYER );
+            --if ( enClass == "HUNTER" ) then
+            --end
+          end
+       end
    end
 end
 
@@ -850,13 +850,13 @@ function ManaWarning_PlayerHealthUpdate()
    end
 
    if ( bMayGiveWarning and not bHealthWarningGiven ) then
-	  health_tresh = maxhp / 100.0 * iHealthTreshhold;
-	  if ( currenthp < health_tresh ) then
+      health_tresh = maxhp / 100.0 * iHealthTreshhold;
+      if ( currenthp < health_tresh ) then
          bHealthWarningGiven = true;
 
          iLowestRemainingTime = 0;
          if ( bHealthDoPotsCheck ) then
-			sPotionHint = "";
+            sPotionHint = "";
             iLowestRemainingTime = ManaWarning_TimeHealthOnCooldown();
          end
 
@@ -868,10 +868,10 @@ function ManaWarning_PlayerHealthUpdate()
          
          if ( bHealthDoPotsCheck ) then
             if not ( sPotionHint == "" ) then
-				ManaWarning_MessageSelf( sHealthWarningMsg .. " (Try using " .. sPotionHint .. ")");
+                ManaWarning_MessageSelf( sHealthWarningMsg .. " (Try using " .. sPotionHint .. ")");
             end
          else
-			ManaWarning_MessageSelf( sHealthWarningMsg );
+            ManaWarning_MessageSelf( sHealthWarningMsg );
          end
       end
    end
@@ -879,7 +879,7 @@ end
 
 -- PlayerSpecChange
 function ManaWarning_PlayerSpecChange()
-	sCurrentSpecName = GetCurrentTalentSpec();
+    sCurrentSpecName = GetCurrentTalentSpec();
 end
 
 -- Resets a boolean, so the ManaWarning will again show on the screen if we're still without mana
@@ -898,6 +898,6 @@ end
 
 -- Returns current Talent specialization
 function GetCurrentTalentSpec()
-	local currentSpec = GetSpecialization()
-	return currentSpec and select(2, GetSpecializationInfo(currentSpec)) or "None"
+    local currentSpec = GetSpecialization()
+    return currentSpec and select(2, GetSpecializationInfo(currentSpec)) or "None"
 end

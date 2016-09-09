@@ -415,6 +415,7 @@ MANA_RESTORING_STUFF_A = {
 
 -- Shared cooldown mana pots
 MANA_RESTORING_STUFF_B = {
+    [127835] = "Ancient Mana Potion",
     [109222] = "Draenic Mana Potion",
     [109221] = "Draenic Channeled Mana Potion",
     [76098] = "Master Mana Potion",
@@ -440,6 +441,7 @@ MANA_RESTORING_STUFF_B = {
 
 -- health stuff; no cooldown, just disapears when used
 HEALTH_RESTORING_STUFF_A = {
+    [129196] = "Legion Healthstone",
     [22105] = "Master Healthstone",
     [22104] = "Master Healthstone",
     [22103] = "Master Healthstone",
@@ -448,7 +450,12 @@ HEALTH_RESTORING_STUFF_A = {
 
 -- Shared cooldown mana pots
 HEALTH_RESTORING_STUFF_B = {
+    [127834] = "Ancient Healing Potion",
+    [127836] = "Ancient Rejuvenation Potion",
+    [136569] = "Aged Health Potion",
+    [109226] = "Draenic Rejuvenation Potion",
     [109223] = "Healing Tonic",
+    [117415] = "Smuggled Tonic",
     [80040] = "Endless Master Healing Potion",
     [76097] = "Master Healing Potion",
     [57191] = "Mythical Healing Potion",
@@ -623,15 +630,15 @@ function ManaWarning_TimeManaOnCooldown()
    locClass, enClass = UnitClass( CONST_PLAYER );
 
    if ( enClass == "DRUID" ) then
---      iSpCd = getSpellCD( "Innervate" );
+      iSpCd = getSpellCD( "Innervate" );
 
---      if ( iSpCd < iLowestRemainingTime ) then
---         iLowestRemainingTime = iSpCd;
---      end
---      if ( iSpCd == 0 ) then
---         sPotionHint = "Innervate";
---         return 0;
---      end
+      if ( iSpCd < iLowestRemainingTime ) then
+         iLowestRemainingTime = iSpCd;
+      end
+      if ( iSpCd == 0 ) then
+         sPotionHint = "Innervate";
+         return 0;
+      end
    elseif ( enClass == "MAGE" ) then
       iSpCd = getSpellCD( "Evocation" );
 

@@ -1,5 +1,5 @@
 ## Author: Kwast of Aszune
-## Interface: 70000
+## Interface: 70100
 ## SavedVariablesPerCharacter: ManaWarning_Settings
 ## Title: ManaWarning
 ## Version: 4.3

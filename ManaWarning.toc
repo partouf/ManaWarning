@@ -2,7 +2,7 @@
 ## Interface: 70300
 ## SavedVariablesPerCharacter: ManaWarning_Settings
 ## Title: ManaWarning
-## Version: 4.5
+## Version: 4.6
 ## X-eMail: partouf@gmail.com
 ManaWarning.xml
 ManaWarning.lua

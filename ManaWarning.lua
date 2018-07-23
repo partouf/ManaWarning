@@ -1,4 +1,4 @@
-﻿-- Author      : Kwast
+-- Author      : Kwast
 -- Create Date : 1/11/2008 3:46:08 PM
 
 -- savedvariable
@@ -388,7 +388,7 @@ end
 
 -- consts
 CONST_VARSLOADED = "VARIABLES_LOADED";
-CONST_POWERUPDATE = "UNIT_POWER";
+CONST_POWERUPDATE = "UNIT_POWER_UPDATE";
 CONST_HEALTHUPDATE = "UNIT_HEALTH";
 CONST_PLAYER = "player";
 CONST_SPEC_CHANGE = "ACTIVE_TALENT_GROUP_CHANGED";
@@ -777,8 +777,8 @@ end
 function ManaWarning_PlayerManaUpdate()
    -- if mana user atm
    if ( UnitPowerType( CONST_PLAYER ) == 0 ) then
-       maxmana = UnitManaMax( CONST_PLAYER );
-       currentmana = UnitMana( CONST_PLAYER );
+       maxmana = UnitPowerMax( CONST_PLAYER );
+       currentmana = UnitPower( CONST_PLAYER );
        
        bMayGiveWarning = true;
        if ( bManaDoCombatCheck ) then

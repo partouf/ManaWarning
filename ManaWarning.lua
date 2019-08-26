@@ -242,7 +242,7 @@ function ManaWarningSettings_LoadFromVars()
     chkOnlyCheckPotionsInRaid:SetChecked( bOnlyCheckPotionsInRaid );
 
     chkAnnounceOomToParty:SetChecked( bAnnounceOomToParty );
-    chkAnnounceOomToParty:SetChecked( bAnnounceOomToInstance );
+    chkAnnounceOomToInstance:SetChecked( bAnnounceOomToInstance );
     chkAnnounceOomToRaid:SetChecked( bAnnounceOomToRaid );
 end
 
